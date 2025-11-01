@@ -1,6 +1,6 @@
-import type {USER_ROLE} from "@/type/user/role.type.ts";
+import type {IUser} from "@/type/state/user.type.ts";
 
 export interface AuthState {
-    user: null | { id: string; name: string; role: USER_ROLE };
+    user: null | IUser;
     token: string | null;
 }
