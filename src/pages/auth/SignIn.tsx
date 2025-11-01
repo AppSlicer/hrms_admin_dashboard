@@ -13,15 +13,41 @@ import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {EyeIcon, EyeOffIcon} from "lucide-react";
+import Cookies from "js-cookie";
+import {TOKEN_NAME} from "@/enum/token.enum.ts";
+import type {IUser} from "@/type/state/user.type.ts";
+import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
+import {toast} from "sonner";
 
 export default function SignInPage() {
+
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isPasswordOn, setIsPasswordOn] = useState<boolean>(false);
 
-    const signIn = async () => {}
+    // Sign in function added
+    const signIn = () => {
+
+        const payload = {email, password};
+        const user: IUser = {
+            id: "as32wdfasd",
+            name: email,
+            role: USER_ROLE_ENUM.ADMIN
+        };
+
+        // Cookies added
+        Cookies.set(TOKEN_NAME.HRM_FIRM, JSON.stringify(payload));
+        Cookies.set(TOKEN_NAME.USER_INFO, JSON.stringify(user));
+
+        // Toast added
+        toast.success(`${user.name} your account successful login`);
+
+        // Navigate
+        navigate("/");
+    }
     const googleAuth = async () => {}
 
     return (
