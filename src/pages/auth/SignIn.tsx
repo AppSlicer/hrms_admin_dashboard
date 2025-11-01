@@ -34,6 +34,7 @@ export default function SignInPage() {
         const payload = {email, password};
         const user: IUser = {
             id: "as32wdfasd",
+            image: "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=",
             name: email,
             role: USER_ROLE_ENUM.ADMIN
         };
