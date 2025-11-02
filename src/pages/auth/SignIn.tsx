@@ -18,14 +18,19 @@ import {EyeIcon, EyeOffIcon} from "lucide-react";
 import Cookies from "js-cookie";
 import {TOKEN_NAME} from "@/enum/token.enum.ts";
 import type {IUser} from "@/type/state/user.type.ts";
-import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
 import {toast} from "sonner";
+import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
 
 export default function SignInPage() {
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isPasswordOn, setIsPasswordOn] = useState<boolean>(false);
+
+    const emailOnRole = {
+        admin: "admin@mail.com",
+        subAdmin: "subAdmin@mail.com"
+    }
 
     // Sign in function added
     const signIn = () => {
@@ -35,7 +40,7 @@ export default function SignInPage() {
             id: "as32wdfasd",
             image: "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=",
             name: email,
-            role: USER_ROLE_ENUM.ADMIN
+            role: emailOnRole.admin == email ? USER_ROLE_ENUM.ADMIN : USER_ROLE_ENUM.SUB_ADMIN,
         };
 
         // Cookies added
