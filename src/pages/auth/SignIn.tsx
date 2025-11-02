@@ -13,7 +13,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {EyeIcon, EyeOffIcon} from "lucide-react";
 import Cookies from "js-cookie";
 import {TOKEN_NAME} from "@/enum/token.enum.ts";
@@ -23,7 +23,6 @@ import {toast} from "sonner";
 
 export default function SignInPage() {
 
-    const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isPasswordOn, setIsPasswordOn] = useState<boolean>(false);
@@ -47,7 +46,8 @@ export default function SignInPage() {
         toast.success(`${user.name} your account successful login`);
 
         // Navigate
-        navigate("/");
+        window.location.href = "/";
+
     }
     const googleAuth = async () => {}
 
