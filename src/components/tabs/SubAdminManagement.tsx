@@ -25,13 +25,13 @@ export default function SubAdminManagement() {
             {/* Header section */}
             <div className={"flex justify-between items-center"}>
                 <h1 className={"text-3xl font-semibold"}>Sub Admin Management</h1>
-                <div className={"gap-2 flex"}>
+                <div className={"gap-2 flex z-20"}>
                     <Button className={"bg-[#125BAC] text-white rounded-full cursor-pointer"}>Add Sub Admin</Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className={"cursor-pointer"}>Subscription</Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 border rounded-xl p-4 mr-8 mt-4" align="start">
+                        <DropdownMenuContent className="w-56 border rounded-xl bg-white p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Subscription status</DropdownMenuLabel>
                             <DropdownMenuGroup className={""}>
                                 <DropdownMenuItem onClick={() => setStatus("active")} className={"p-2 bg-green-100 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Active</DropdownMenuItem>
