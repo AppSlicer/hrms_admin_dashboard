@@ -1,8 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type {UserState} from "../../type/state/user.type.ts";
 import {REDUX_STATE_NAME} from "../../enum/state.enum.ts";
 
-const initialState: UserState = {
+const initialState = {
     name: null,
 };
 
@@ -11,6 +10,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action: PayloadAction<string>) => {
+            // @ts-ignore
             state.name = action.payload;
         },
         clearUser: (state) => {
