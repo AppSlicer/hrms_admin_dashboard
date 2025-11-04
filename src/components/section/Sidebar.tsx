@@ -1,7 +1,6 @@
 import {LogOut} from "lucide-react";
 import Cookies from "js-cookie";
 import {TOKEN_NAME} from "@/enum/token.enum.ts";
-import {toast} from "sonner";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "@/redux/stores/store.ts";
 import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
@@ -25,7 +24,6 @@ export default function Sidebar () {
     const setTab = (tab: string) => {
         setSearchParams({tab});
         dispatch(setTabOnState({tab}));
-        toast.success(`${tab} active successfully!`, {position: "top-right"});
     }
 
     useEffect(() => {
@@ -34,7 +32,7 @@ export default function Sidebar () {
 
     return (
         <div className={"w-[400px] h-full flex justify-center items-center relative"}>
-            <div className="w-[90%] h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end">
+            <div className="w-[230px] md:w-[260px] xl:w-[300px] h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end">
                 {user?.role === USER_ROLE_ENUM.ADMIN ? (
                     admin.map((Item, index) => (
                         <div
