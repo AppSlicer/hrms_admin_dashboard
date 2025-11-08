@@ -34,7 +34,7 @@ export default function Navbar () {
                         className={"relative cursor-pointer flex justify-center items-center w-[40px] h-[40px]"}
                     >
                         <ImageWithSkeleton src={messagesIcon} />
-                        <span className={"absolute bottom-0 w-[15px] h-[15px] text-white flex justify-center items-center text-xs rounded-full bg-red-700"}>{messages}</span>
+                        <span className={"absolute top-1 right-0 w-[15px] h-[15px] text-white flex justify-center items-center text-xs rounded-full bg-red-700"}>{messages}</span>
                     </div>
                     <div
                         onClick={() => navigate("")}
