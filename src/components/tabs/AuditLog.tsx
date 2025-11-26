@@ -23,7 +23,7 @@ export default function AuditLog() {
         <div className={"w-full h-full p-6"}>
             {/* Header section */}
             <div className={"flex justify-between items-center"}>
-                <h1 className={"text-3xl font-semibold"}>HRMC Audit Report</h1>
+                <h1 className={"text-3xl font-semibold"}>System Audit Logs</h1>
                 <div className={"gap-2 flex z-20"}>
                     {/*<Button className={"bg-[#125BAC] text-white rounded-full cursor-pointer"}>Add Sub Admin</Button>*/}
                     <DropdownMenu>
