@@ -19,6 +19,8 @@ import LeaveManagement from "@/components/tabs/LeaveManagement.tsx";
 import TaskManagement from "@/components/tabs/TaskManagement.tsx";
 import PaySlip from "@/components/tabs/PaySlip.tsx";
 import NotAvailable from "@/components/tabs/NotAvailable.tsx";
+import Subscriber from "@/components/tabs/Subscriber";
+import EmailMarketing from "@/components/tabs/EmailMarketing";
 
 export default function HomePage () {
 
@@ -55,9 +57,15 @@ export default function HomePage () {
                     <PrivacyPolicies />
                 ) :
                 tab == admin[9].title ? (
-                    <ProfileTabs />
+                    <Subscriber />
                 ) :
                 tab == admin[10].title ? (
+                    <EmailMarketing />
+                ) :
+                tab == admin[11].title ? (
+                    <ProfileTabs />
+                ) :
+                tab == admin[12].title ? (
                     <HelpAndSupport />
                 ) :
                 tab == subAdmin[1].title ? (
