@@ -13,6 +13,7 @@ import { USER_ROLE_ENUM } from "@/enum/role.enum";
 import { Loader2, Plus, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Tooltip from "@/components/ui/Tooltip";
 
 import {
     DropdownMenu,
@@ -134,11 +135,11 @@ export default function HelpAndSupport() {
 
             <Table totalPages={1}>
                 <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
-                    <TableRowCol><h3>SL</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.5]"><h3>SL</h3></TableRowCol>
                     <TableRowCol><h3>User</h3></TableRowCol>
-                    <TableRowCol><h3>Subject</h3></TableRowCol>
+                    <TableRowCol className="flex-[1.5]"><h3>Subject</h3></TableRowCol>
                     <TableRowCol><h3>Status</h3></TableRowCol>
-                    <TableRowCol><h3>Date</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.8]"><h3>Date</h3></TableRowCol>
                     <TableRowCol><h3>Action</h3></TableRowCol>
                 </TableRow>
 
@@ -155,16 +156,20 @@ export default function HelpAndSupport() {
                 ) : (
                     tickets.map((ticket, index) => (
                         <TableRow key={ticket.id} className={"h-[60px] border rounded-none hover:bg-gray-50 transition-colors"}>
-                            <TableRowCol><h3>{index + 1}</h3></TableRowCol>
+                            <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm font-medium truncate" title={ticket.user?.email || user?.email}>
-                                    {ticket.user?.email || user?.email}
-                                </h3>
+                                <Tooltip content={ticket.user?.email || user?.email || ""}>
+                                    <h3 className="text-sm font-medium truncate px-2">
+                                        {ticket.user?.email || user?.email}
+                                    </h3>
+                                </Tooltip>
                             </TableRowCol>
-                            <TableRowCol>
-                                <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(ticket.subject)} title={ticket.message}>
-                                    {ticket.subject}
-                                </h3>
+                            <TableRowCol className="flex-[1.5]">
+                                <Tooltip content={ticket.subject}>
+                                    <h3 className="text-sm truncate cursor-pointer px-2" onClick={() => copyToClipboard(ticket.subject)}>
+                                        {ticket.subject}
+                                    </h3>
+                                </Tooltip>
                             </TableRowCol>
                             <TableRowCol>
                                 <div className={"w-full h-full flex justify-center items-center"}>
@@ -196,7 +201,7 @@ export default function HelpAndSupport() {
                                     )}
                                 </div>
                             </TableRowCol>
-                            <TableRowCol>
+                            <TableRowCol className="flex-[0.8]">
                                 <h3 className="text-xs">{new Date(ticket.createdAt).toLocaleDateString()}</h3>
                             </TableRowCol>
                             <TableRowCol>

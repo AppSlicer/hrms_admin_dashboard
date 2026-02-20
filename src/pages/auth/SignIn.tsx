@@ -22,6 +22,8 @@ import {authService} from "@/services/auth.service.ts";
 import {useDispatch} from "react-redux";
 import {login} from "@/redux/reducers/authSlice.ts";
 
+import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
+
 export default function SignInPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -43,13 +45,20 @@ export default function SignInPage() {
             
             const { accessToken, refreshToken, user } = result;
 
+            // RBAC Check: Only allow Admin and Sub Admin to this dashboard
+            if (user.role !== USER_ROLE_ENUM.SUPER_ADMIN && user.role !== USER_ROLE_ENUM.SUB_ADMIN) {
+                toast.error("Access Denied: Only administrators can access this dashboard.");
+                setIsLoading(false);
+                return;
+            }
+
             // Map backend user to frontend IUser if needed
             const frontendUser = {
                 id: user.id,
                 name: user.email.split('@')[0], // Fallback if name not in backend user
                 email: user.email,
                 role: user.role,
-                image: "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
+                image: user.profileImage || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
             };
 
             // Dispatch to Redux

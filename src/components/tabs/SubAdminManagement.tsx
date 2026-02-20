@@ -4,13 +4,13 @@ import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {LockIcon, Trash2} from "lucide-react";
 import {userService} from "@/services/user.service.ts";
 import {toast} from "sonner";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
+import Tooltip from "@/components/ui/Tooltip";
 
 export default function SubAdminManagement() {
     const [subAdmins, setSubAdmins] = useState<any[]>([]);
@@ -158,10 +158,10 @@ export default function SubAdminManagement() {
             <Table totalPages={1} className={""}>
                 {/* Table Heading*/}
                 <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
-                    <TableRowCol><h3>SL</h3></TableRowCol>
-                    <TableRowCol><h3>Image</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.5]"><h3>SL</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.5]"><h3>Image</h3></TableRowCol>
                     <TableRowCol><h3>Sub Admin</h3></TableRowCol>
-                    <TableRowCol><h3>Email</h3></TableRowCol>
+                    <TableRowCol className="flex-[1.5]"><h3>Email</h3></TableRowCol>
                     <TableRowCol><h3>Created At</h3></TableRowCol>
                     <TableRowCol><h3>Status</h3></TableRowCol>
                     <TableRowCol><h3>Action</h3></TableRowCol>
@@ -178,8 +178,8 @@ export default function SubAdminManagement() {
                 ) : (
                     subAdmins.map((admin, index) => (
                         <TableRow key={admin.id} className={"h-[60px] border rounded-none"}>
-                            <TableRowCol><h3>{index + 1}</h3></TableRowCol>
-                            <TableRowCol>
+                            <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
+                            <TableRowCol className="flex-[0.5]">
                                 <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
                                     <ImageWithSkeleton src={admin.profileImage || defaultImage} />
                                 </div>
@@ -187,8 +187,10 @@ export default function SubAdminManagement() {
                             <TableRowCol>
                                 <h3 className="text-sm truncate" title={admin.email}>{admin.email.split('@')[0]}</h3>
                             </TableRowCol>
-                            <TableRowCol>
-                                <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(admin.email)}>{admin.email}</h3>
+                            <TableRowCol className="flex-[1.5]">
+                                <Tooltip content={admin.email}>
+                                    <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(admin.email)}>{admin.email}</h3>
+                                </Tooltip>
                             </TableRowCol>
                             <TableRowCol>
                                 <h3 className="text-sm">{new Date(admin.createdAt).toLocaleDateString()}</h3>

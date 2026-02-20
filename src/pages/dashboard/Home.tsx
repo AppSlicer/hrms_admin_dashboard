@@ -1,8 +1,8 @@
 import DashboardLayout from "@/layout/DashboardLayout.tsx";
 import {useSelector} from "react-redux";
-import type { RootState } from "@/redux/stores/store.ts";
+import type {RootState} from "@/redux/stores/store.ts";
 import OverViewTab from "@/components/tabs/Overview.tsx";
-import { admin, subAdmin } from "@/enum/tab.enum.ts";
+import {admin, subAdmin} from "@/enum/tab.enum.ts";
 import SubAdminManagement from "@/components/tabs/SubAdminManagement.tsx";
 import EmployeeManagement from "@/components/tabs/EmployeeManagement.tsx";
 import Profits from "@/components/tabs/Profit.tsx";
@@ -20,6 +20,8 @@ import PaySlip from "@/components/tabs/PaySlip.tsx";
 import NotAvailable from "@/components/tabs/NotAvailable.tsx";
 import Subscriber from "@/components/tabs/Subscriber";
 import EmailMarketing from "@/components/tabs/EmailMarketing";
+import Messages from "@/components/tabs/Messages.tsx";
+import Notifications from "@/components/tabs/Notifications.tsx";
 import { useEffect } from "react";
 
 export default function HomePage () {
@@ -35,6 +37,12 @@ export default function HomePage () {
     return (
         <DashboardLayout>
             {
+                tab === "Messages" ? (
+                    <Messages />
+                ) :
+                tab === "Notifications" ? (
+                    <Notifications />
+                ) :
                 tab == admin[0].title ? (
                     <OverViewTab />
                 ) :

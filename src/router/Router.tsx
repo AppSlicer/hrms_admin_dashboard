@@ -4,6 +4,10 @@ import Loader from "../components/ui/Loader.tsx";
 
 // Lazy Imports
 const HomePage = lazy(()=> import( "../pages/dashboard/Home.tsx"));
+const MessagesPage = lazy(()=> import( "../pages/dashboard/MessagesPage.tsx"));
+const NotificationsPage = lazy(()=> import( "../pages/dashboard/NotificationsPage.tsx"));
+const EmployerManagementPage = lazy(()=> import( "../pages/dashboard/EmployerManagementPage.tsx"));
+const ProfilePage = lazy(()=> import( "../pages/dashboard/ProfilePage.tsx"));
 const SignIn = lazy( () => import("../pages/auth/SignIn.tsx"));
 const NotFoundPage = lazy( () => import("../pages/not-found/NotFoundPage.tsx"));
 const ProtectedRoute = lazy( () => import("./ProtectedRoute.tsx"));
@@ -30,6 +34,10 @@ export default function RouterElement () {
                     {/* Dashboard Routes */}
                     <Route element={<ProtectedRoute />} >
                         <Route  path="/"  element={<HomePage />} />
+                        <Route  path="/messages"  element={<MessagesPage />} />
+                        <Route  path="/notifications"  element={<NotificationsPage />} />
+                        <Route  path="/employer-management"  element={<EmployerManagementPage />} />
+                        <Route  path="/profile"  element={<ProfilePage />} />
                     </Route>
 
                     {/* Not Found */}

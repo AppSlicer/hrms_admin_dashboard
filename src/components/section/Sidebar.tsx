@@ -5,15 +5,25 @@ import { TOKEN_NAME } from "@/enum/token.enum.ts";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store.ts";
 import { USER_ROLE_ENUM } from "@/enum/role.enum.ts";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { setTabOnState } from "@/redux/reducers/tabSlice.ts";
 import { admin, subAdmin } from "@/enum/tab.enum.ts";
 
 export default function Sidebar() {
     const { user } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
-    const activeTab = searchParams.get("tab");
+    
+    // Determine active tab from either path or search param
+    const activeTab = useMemo(() => {
+        if (location.pathname === '/messages') return "Messages";
+        if (location.pathname === '/notifications') return "Notifications";
+        if (location.pathname === '/employer-management') return "Employer Management";
+        if (location.pathname === '/profile') return "My Profile";
+        return searchParams.get("tab");
+    }, [location.pathname, searchParams]);
 
     const logOut = useCallback(() => {
         Cookies.remove(TOKEN_NAME.USER_INFO);
@@ -22,17 +32,27 @@ export default function Sidebar() {
     }, []);
 
     const setTab = useCallback((tab: string) => {
-        setSearchParams({ tab });
+        // Special case for path-based pages
+        if (tab === "Messages") navigate("/messages");
+        else if (tab === "Notifications") navigate("/notifications");
+        else if (tab === "Employer Management") navigate("/employer-management");
+        else if (tab === "My Profile") navigate("/profile");
+        else {
+            if (location.pathname !== '/') navigate(`/?tab=${tab}`);
+            else setSearchParams({ tab });
+        }
         dispatch(setTabOnState({ tab }));
-    }, [setSearchParams, dispatch]);
+    }, [setSearchParams, dispatch, navigate, location.pathname]);
 
     useEffect(() => {
-        if (user?.role === USER_ROLE_ENUM.SUPER_ADMIN) {
-            setTab(admin[0].title);
-        } else if (user?.role === USER_ROLE_ENUM.SUB_ADMIN) {
-            setTab(subAdmin[0].title);
+        if (location.pathname === '/' && !searchParams.get("tab")) {
+            if (user?.role === USER_ROLE_ENUM.SUPER_ADMIN) {
+                setTab(admin[0].title);
+            } else if (user?.role === USER_ROLE_ENUM.SUB_ADMIN) {
+                setTab(subAdmin[0].title);
+            }
         }
-    }, []);
+    }, [location.pathname, user?.role]);
 
     // Memoized tab configuration based on user role
     const tabs = useMemo(() => {

@@ -1,28 +1,17 @@
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import type {RootState} from "@/redux/stores/store.ts";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {setTabOnState} from "@/redux/reducers/tabSlice.ts";
-import {admin, subAdmin} from "@/enum/tab.enum.ts";
-import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
 
 export default function Profile () {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user } = useSelector((state: RootState) => state.auth );
-    const [, setSearchParams] = useSearchParams();
 
     const goToProfile = () => {
-        let profileTabTitle = "";
-        if (user?.role === USER_ROLE_ENUM.SUPER_ADMIN) {
-            profileTabTitle = admin.find(t => t.title === "My Profile")?.title || "My Profile";
-        } else if (user?.role === USER_ROLE_ENUM.SUB_ADMIN) {
-            profileTabTitle = subAdmin.find(t => t.title === "My Profile")?.title || "My Profile";
-        }
-
-        if (profileTabTitle) {
-            setSearchParams({ tab: profileTabTitle });
-            dispatch(setTabOnState({ tab: profileTabTitle }));
-        }
+        dispatch(setTabOnState({ tab: "My Profile" }));
+        navigate("/profile");
     }
 
     return (
