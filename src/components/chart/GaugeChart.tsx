@@ -6,6 +6,8 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -27,6 +29,9 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
                                                    size = 200,
                                                    colors = { active: "#F27D31", background: "#E0E0E0" }
                                                }) => {
+    const themeMode = useSelector((state: RootState) => state.theme.mode);
+    const isDark = themeMode === 'dark';
+    
     const percentage = (value / max) * 100;
     const normalizedValue = Math.min(Math.max(value, 0), max);
 
@@ -34,7 +39,7 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
         datasets: [
             {
                 data: [normalizedValue, max - normalizedValue],
-                backgroundColor: [colors.active, colors.background],
+                backgroundColor: [colors.active, isDark ? "#374151" : colors.background],
                 borderWidth: 0,
                 cutout: "80%",
                 borderRadius: 10,
@@ -77,7 +82,7 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
                     style={{
                         width: '4px',
                         height: needleLength,
-                        backgroundColor: '#374151',
+                        backgroundColor: isDark ? '#9ca3af' : '#374151',
                         borderRadius: '2px',
                         transform: `translateX(-50%) rotate(${needleAngle}deg)`,
                         transformOrigin: 'bottom center',
@@ -92,7 +97,7 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
                     style={{
                         width: '20px',
                         height: '20px',
-                        backgroundColor: '#374151',
+                        backgroundColor: isDark ? '#9ca3af' : '#374151',
                         borderRadius: '50%',
                         zIndex: 11,
                     }}
@@ -101,13 +106,13 @@ const GaugeChart: React.FC<GaugeChartProps> = ({
 
             {/* Labels and Value */}
             <div className="text-center mt-4">
-                <div className="text-3xl font-bold text-gray-800">
+                <div className="text-3xl font-bold text-gray-800 dark:text-white">
                     ${value.toLocaleString()}
                 </div>
-                <div className="text-lg text-gray-600 mt-1">
+                <div className="text-lg text-gray-600 dark:text-gray-400 mt-1">
                     {label}
                 </div>
-                <div className="text-sm text-gray-500 mt-1">
+                <div className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                     {percentage.toFixed(1)}% of ${max.toLocaleString()}
                 </div>
             </div>

@@ -171,7 +171,7 @@ export default function SubAdminManagement() {
             {/* Table */}
             <Table totalPages={1} className={""}>
                 {/* Table Heading*/}
-                <TableRow className={"bg-[#C7E2FF] dark:bg-blue-900/30 h-[60px] border-0 font-semibold"}>
+                <TableRow className={"bg-[#C7E2FF] dark:bg-blue-900/30 h-[60px] border-b border-gray-200 dark:border-gray-800 font-semibold"}>
                     <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">SL</h3></TableRowCol>
                     <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">Image</h3></TableRowCol>
                     <TableRowCol><h3 className="dark:text-white">Sub Admin</h3></TableRowCol>

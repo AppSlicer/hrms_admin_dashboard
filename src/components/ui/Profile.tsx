@@ -16,11 +16,11 @@ export default function Profile () {
 
     return (
         <div onClick={goToProfile} className={"min-w-[120px] h-[45px] flex justify-center items-center cursor-pointer hover:opacity-80 transition-opacity"}>
-            <div className={"w-[45px] h-[45px] rounded-full bg-blue-100 overflow-hidden shrink-0 border-2 border-white shadow-sm"}>
+            <div className={"w-[45px] h-[45px] rounded-full bg-blue-100 dark:bg-blue-900/30 overflow-hidden shrink-0 border-2 border-white dark:border-gray-800 shadow-sm"}>
                 <ImageWithSkeleton src={user?.image!} />
             </div>
-            <div className={"flex flex-col ml-2 border-l border-[#BFBFBF] pl-2 overflow-hidden"}>
-                <h1 className={"text-base font-bold text-[#0062EB] truncate"}>
+            <div className={"flex flex-col ml-2 border-l border-[#BFBFBF] dark:border-gray-700 pl-2 overflow-hidden"}>
+                <h1 className={"text-base font-bold text-[#0062EB] dark:text-blue-400 truncate"}>
                     {
                         user?.name
                             ?.toString()
@@ -30,7 +30,7 @@ export default function Profile () {
                             .slice(0, 15)
                     }
                 </h1>
-                <h4 className={"text-[10px] uppercase font-bold tracking-wider text-gray-500"}>{user?.role?.replace('_', ' ')}</h4>
+                <h4 className={"text-[10px] uppercase font-bold tracking-wider text-gray-500 dark:text-gray-400"}>{user?.role?.replace('_', ' ')}</h4>
             </div>
         </div>
     )

@@ -11,7 +11,7 @@ export default function TableRow ({
                                     children,
                                   }: ITableRowProps) {
     return (
-        <div className={`w-full flex items-stretch overflow-hidden border-b border-gray-200 dark:border-gray-800 last:border-b-0 min-h-[50px] ${className}`}>
+        <div className={`w-full flex items-stretch overflow-hidden border-b border-gray-200 dark:border-gray-800 min-h-[50px] ${className}`}>
             {children}
         </div>
     )

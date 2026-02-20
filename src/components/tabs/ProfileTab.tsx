@@ -162,13 +162,13 @@ export default function ProfileTabs() {
     );
 
     return (
-        <div className="w-full h-full px-6 overflow-y-auto custom-scrollbar">
+        <div className="w-full h-full px-6 overflow-y-auto custom-scrollbar bg-transparent">
             {/* Tabs */}
             <div className="flex gap-6 p-6">
                 <h2
                     onClick={() => setTab("profile")}
                     className={`text-xl font-semibold cursor-pointer transition-all duration-300 pb-2 ${
-                        tab === "profile" ? "text-[#125BAC] border-b-2 border-[#125BAC]" : "text-gray-400 hover:text-gray-600"
+                        tab === "profile" ? "text-[#125BAC] dark:text-blue-400 border-b-2 border-[#125BAC] dark:border-blue-400" : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     }`}
                 >
                     Edit Profile
@@ -176,7 +176,7 @@ export default function ProfileTabs() {
                 <h2
                     onClick={() => setTab("password")}
                     className={`text-xl font-semibold cursor-pointer transition-all duration-300 pb-2 ${
-                        tab === "password" ? "text-[#125BAC] border-b-2 border-[#125BAC]" : "text-gray-400 hover:text-gray-600"
+                        tab === "password" ? "text-[#125BAC] dark:text-blue-400 border-b-2 border-[#125BAC] dark:border-blue-400" : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     }`}
                 >
                     Change Password
@@ -184,14 +184,14 @@ export default function ProfileTabs() {
             </div>
 
             {/* Content Card */}
-            <div className="max-w-[900px] min-h-[500px] mx-auto shadow-2xl p-8 rounded-3xl bg-white mb-10 border border-gray-100/50">
+            <div className="max-w-[900px] min-h-[500px] mx-auto shadow-2xl p-8 rounded-3xl bg-white dark:bg-card mb-10 border border-gray-100/50 dark:border-gray-800">
                 {tab === "profile" && (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {/* Profile Image - ENHANCED UI */}
                         <div className="flex flex-col items-center gap-4">
                             <div 
                                 onClick={() => !isUploading && fileInputRef.current?.click()}
-                                className={`group relative w-[180px] h-[180px] rounded-full overflow-hidden cursor-pointer ring-4 ring-blue-50 transition-all duration-500 hover:ring-[#125BAC]/30 ${isUploading ? 'cursor-wait' : 'hover:scale-[1.02]'}`}
+                                className={`group relative w-[180px] h-[180px] rounded-full overflow-hidden cursor-pointer ring-4 ring-blue-50 dark:ring-blue-900/20 transition-all duration-500 hover:ring-[#125BAC]/30 ${isUploading ? 'cursor-wait' : 'hover:scale-[1.02]'}`}
                             >
                                 {/* Hidden File Input */}
                                 <input 
@@ -224,7 +224,7 @@ export default function ProfileTabs() {
                             </div>
                             
                             <div className="text-center">
-                                <p className="text-xs text-gray-400 font-medium italic">Allowed: JPG, PNG. Max size 5MB</p>
+                                <p className="text-xs text-gray-400 dark:text-gray-500 font-medium italic">Allowed: JPG, PNG. Max size 5MB</p>
                             </div>
                         </div>
 
@@ -232,33 +232,33 @@ export default function ProfileTabs() {
                         <div className="mt-10 flex flex-col gap-6 max-w-[500px] mx-auto">
                             <div className="grid grid-cols-1 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="fullname" className="text-gray-600 font-bold ml-1">
+                                    <Label htmlFor="fullname" className="text-gray-600 dark:text-gray-400 font-bold ml-1">
                                         {profile?.role === 'EMPLOYER' ? 'Company Name' : 'Full Name'}
                                     </Label>
                                     <Input
                                         id="fullname"
-                                        className="h-12 rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-500 shadow-sm"
+                                        className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 shadow-sm"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="email" className="text-gray-600 font-bold ml-1">Email Address</Label>
+                                    <Label htmlFor="email" className="text-gray-600 dark:text-gray-400 font-bold ml-1">Email Address</Label>
                                     <Input
                                         id="email"
                                         type="email"
-                                        className="h-12 rounded-xl border-gray-200 shadow-sm"
+                                        className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white shadow-sm"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="contact" className="text-gray-600 font-bold ml-1">Contact Number</Label>
+                                    <Label htmlFor="contact" className="text-gray-600 dark:text-gray-400 font-bold ml-1">Contact Number</Label>
                                     <Input
                                         id="contact"
-                                        className="h-12 rounded-xl border-gray-200 shadow-sm"
+                                        className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white shadow-sm"
                                         value={contact}
                                         onChange={(e) => setContact(e.target.value)}
                                     />
@@ -268,7 +268,7 @@ export default function ProfileTabs() {
                             <Button 
                                 disabled={isUpdating || isUploading}
                                 onClick={handleUpdateProfile}
-                                className="mt-4 h-14 rounded-xl bg-[#125BAC] hover:opacity-90 text-white font-bold text-lg shadow-xl shadow-blue-200 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                                className="mt-4 h-14 rounded-xl bg-[#125BAC] dark:bg-blue-600 hover:opacity-90 text-white font-bold text-lg shadow-xl shadow-blue-200 dark:shadow-none transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {isUpdating ? (
                                     <>
@@ -285,33 +285,33 @@ export default function ProfileTabs() {
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-6 max-w-[500px] mx-auto pt-10">
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="currentPassword">Current Password</Label>
+                                <Label htmlFor="currentPassword" title="" className="dark:text-gray-400">Current Password</Label>
                                 <Input 
                                     id="currentPassword" 
                                     type="password" 
-                                    className="h-12 rounded-xl border-gray-200"
+                                    className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white"
                                     value={passwords.currentPassword}
                                     onChange={e => setPasswords({...passwords, currentPassword: e.target.value})}
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="newPassword">New Password</Label>
+                                <Label htmlFor="newPassword" title="" className="dark:text-gray-400">New Password</Label>
                                 <Input 
                                     id="newPassword" 
                                     type="password" 
-                                    className="h-12 rounded-xl border-gray-200"
+                                    className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white"
                                     value={passwords.newPassword}
                                     onChange={e => setPasswords({...passwords, newPassword: e.target.value})}
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Label htmlFor="confirmPassword" title="" className="dark:text-gray-400">Confirm Password</Label>
                                 <Input 
                                     id="confirmPassword" 
                                     type="password" 
-                                    className="h-12 rounded-xl border-gray-200"
+                                    className="h-12 rounded-xl border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white"
                                     value={passwords.confirmPassword}
                                     onChange={e => setPasswords({...passwords, confirmPassword: e.target.value})}
                                 />
@@ -321,7 +321,7 @@ export default function ProfileTabs() {
                         <Button 
                             disabled={isUpdating}
                             onClick={handleChangePassword}
-                            className="mt-4 h-12 rounded-xl bg-blue-600 hover:opacity-90 text-white font-bold text-lg transition-all active:scale-95 shadow-lg shadow-blue-100"
+                            className="mt-4 h-12 rounded-xl bg-blue-600 dark:bg-blue-700 hover:opacity-90 text-white font-bold text-lg transition-all active:scale-95 shadow-lg shadow-blue-100 dark:shadow-none"
                         >
                             {isUpdating ? "Processing..." : "Change Password"}
                         </Button>

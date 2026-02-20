@@ -4,9 +4,10 @@ interface Props {
     children: React.ReactNode;
     className?: string;
     totalPages?: number;
+    minHeight?: string;
 }
 
-export default function Table({ children, className, totalPages = 5 }: Props) {
+export default function Table({ children, className, totalPages = 5, minHeight = "450px" }: Props) {
     const [currentPage, setCurrentPage] = useState(1);
 
     const handlePrev = () => {
@@ -18,9 +19,9 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
     };
 
     return (
-        <div className="w-full flex flex-col mt-5 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden bg-white dark:bg-card">
-            <div className="overflow-x-auto">
-                <div className={`min-w-[1000px] ${className}`}>
+        <div className="w-full flex flex-col mt-5 border-x border-b border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden bg-white dark:bg-card">
+            <div className="overflow-x-auto flex-1" style={{ minHeight }}>
+                <div className={`min-w-[1000px] h-full ${className}`}>
                     {children}
                 </div>
             </div>

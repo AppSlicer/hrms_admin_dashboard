@@ -11,6 +11,9 @@ import {
     Filler,
 } from 'chart.js';
 
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store";
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -23,6 +26,9 @@ ChartJS.register(
 );
 
 export default function RevenueChart() {
+    const themeMode = useSelector((state: RootState) => state.theme.mode);
+    const isDark = themeMode === 'dark';
+
     const labels = Array.from({ length: 30 }, (_, i) => `Dec ${i + 1}`);
 
     const revenueData = {
@@ -32,10 +38,10 @@ export default function RevenueChart() {
                 label: "Revenue",
                 data: labels.map(() => Math.floor(Math.random() * 35000) + 5000),
                 borderColor: "rgba(34, 197, 94, 1)",
-                backgroundColor: "rgba(34, 197, 94, 0.1)",
+                backgroundColor: isDark ? "rgba(34, 197, 94, 0.2)" : "rgba(34, 197, 94, 0.1)",
                 fill: true,
                 pointBackgroundColor: "rgba(34, 197, 94, 1)",
-                pointBorderColor: "#ffffff",
+                pointBorderColor: isDark ? "#1f2937" : "#ffffff",
                 pointHoverBackgroundColor: "#ffffff",
                 pointHoverBorderColor: "rgba(34, 197, 94, 1)",
             },
@@ -43,10 +49,10 @@ export default function RevenueChart() {
                 label: "Other Revenue",
                 data: labels.map(() => Math.floor(Math.random() * 25000) + 5000),
                 borderColor: "rgba(59, 130, 246, 1)",
-                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(59, 130, 246, 0.1)",
                 fill: true,
                 pointBackgroundColor: "rgba(59, 130, 246, 1)",
-                pointBorderColor: "#ffffff",
+                pointBorderColor: isDark ? "#1f2937" : "#ffffff",
                 pointHoverBackgroundColor: "#ffffff",
                 pointHoverBorderColor: "rgba(59, 130, 246, 1)",
             }
@@ -64,15 +70,16 @@ export default function RevenueChart() {
                 labels: {
                     usePointStyle: true,
                     padding: 15,
+                    color: isDark ? '#9ca3af' : '#6b7280',
                 }
             },
             tooltip: {
                 mode: "index" as const,
                 intersect: false,
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                titleColor: '#1f2937',
-                bodyColor: '#1f2937',
-                borderColor: '#e5e7eb',
+                backgroundColor: isDark ? 'rgba(17, 24, 39, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                titleColor: isDark ? '#f3f4f6' : '#1f2937',
+                bodyColor: isDark ? '#f3f4f6' : '#1f2937',
+                borderColor: isDark ? '#374151' : '#e5e7eb',
                 borderWidth: 1,
                 padding: 12,
                 boxPadding: 6,
@@ -91,16 +98,16 @@ export default function RevenueChart() {
                 },
                 ticks: {
                     maxTicksLimit: 8,
-                    color: '#6b7280',
+                    color: isDark ? '#9ca3af' : '#6b7280',
                 }
             },
             y: {
                 grid: {
-                    color: '#f3f4f6',
+                    color: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f3f4f6',
                     drawBorder: false,
                 },
                 ticks: {
-                    color: '#6b7280',
+                    color: isDark ? '#9ca3af' : '#6b7280',
                     callback: (value: any) => `$${(value / 1000).toFixed(0)}k`
                 }
             }
@@ -120,27 +127,27 @@ export default function RevenueChart() {
 
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div className="bg-white dark:bg-card p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-xl font-bold text-gray-800">Revenue Analytics</h3>
-                    <p className="text-gray-500 text-sm">December 2024 Performance</p>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">Revenue Analytics</h3>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">December 2024 Performance</p>
                 </div>
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">+12.5%</span>
+                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">+12.5%</span>
             </div>
             <div className="h-80">
                 <Line data={revenueData} options={chartOptions} />
             </div>
             <div className="mt-4 flex justify-between items-center">
                 <div>
-                    <p className="text-gray-600">Total Revenue</p>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-gray-600 dark:text-gray-400">Total Revenue</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                         ${(totalRevenue / 1000).toFixed(1)}k
                     </p>
                 </div>
                 <div className="text-right">
-                    <p className="text-gray-600">Avg. Daily</p>
-                    <p className="text-lg font-semibold text-gray-800">
+                    <p className="text-gray-600 dark:text-gray-400">Avg. Daily</p>
+                    <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                         ${(totalRevenue / 30 / 1000).toFixed(1)}k
                     </p>
                 </div>

@@ -73,22 +73,22 @@ export default function UserManagement() {
     };
 
     return (
-        <div className={"w-full h-full p-6"}>
+        <div className={"w-full h-full p-6 bg-transparent"}>
             {/* Header section */}
             <div className={"flex justify-between items-center mb-6"}>
-                <h1 className={"text-3xl font-semibold"}>User Management</h1>
+                <h1 className={"text-3xl font-semibold text-gray-900 dark:text-white"}>User Management</h1>
                 <div className={"gap-2 flex z-20"}>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className={"cursor-pointer"}>
+                            <Button variant="outline" className={"cursor-pointer dark:border-gray-800 dark:text-gray-300 dark:bg-card"}>
                                 {userType === "EMPLOYER" ? "Employers" : "Employees"}
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 border bg-white rounded-xl p-4 mr-8 mt-4" align="start">
-                            <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Users type</DropdownMenuLabel>
+                        <DropdownMenuContent className="w-56 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl p-4 mr-8 mt-4" align="start">
+                            <DropdownMenuLabel className={"font-semibold border-b dark:border-gray-800 pb-2 dark:text-gray-200"}>Users type</DropdownMenuLabel>
                             <DropdownMenuGroup>
-                                <DropdownMenuItem onClick={() => setUserType("EMPLOYER")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setUserType("EMPLOYEE")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setUserType("EMPLOYER")} className={"p-2 border border-gray-100 dark:border-gray-800 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold dark:text-gray-300 dark:hover:bg-gray-800"}>Employer</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setUserType("EMPLOYEE")} className={"p-2 border border-gray-100 dark:border-gray-800 rounded-full text-center cursor-pointer hover:shadow-sm font-semibold dark:text-gray-300 dark:hover:bg-gray-800"}>Employee</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -96,15 +96,15 @@ export default function UserManagement() {
             </div>
             {/* Table */}
             <Table totalPages={1} className={""}>
-                <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
-                    <TableRowCol className="flex-[0.5]"><h3>SL</h3></TableRowCol>
-                    <TableRowCol className="flex-[0.5]"><h3>Image</h3></TableRowCol>
-                    <TableRowCol className="flex-[1.2]"><h3>Name</h3></TableRowCol>
-                    <TableRowCol className="flex-[1.5]"><h3>Email</h3></TableRowCol>
-                    <TableRowCol><h3>Company</h3></TableRowCol>
-                    <TableRowCol><h3>Joined At</h3></TableRowCol>
-                    <TableRowCol><h3>Status</h3></TableRowCol>
-                    <TableRowCol><h3>Action</h3></TableRowCol>
+                <TableRow className={"bg-[#C7E2FF] dark:bg-blue-900/30 h-[60px] border-b border-gray-200 dark:border-gray-800 font-semibold"}>
+                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">SL</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">Image</h3></TableRowCol>
+                    <TableRowCol className="flex-[1.2]"><h3 className="dark:text-white">Name</h3></TableRowCol>
+                    <TableRowCol className="flex-[1.5]"><h3 className="dark:text-white">Email</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Company</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Joined At</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Status</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Action</h3></TableRowCol>
                 </TableRow>
 
                 {isLoading ? (
@@ -113,44 +113,44 @@ export default function UserManagement() {
                     </TableRow>
                 ) : filteredData.length === 0 ? (
                     <TableRow className="h-[100px] border rounded-none">
-                        <TableRowCol className="col-span-full text-center text-gray-500">No users found.</TableRowCol>
+                        <TableRowCol className="col-span-full text-center text-gray-500 dark:text-gray-400">No users found.</TableRowCol>
                     </TableRow>
                 ) : (
                     filteredData.map((user, index) => (
-                        <TableRow key={user.id} className={"h-[60px] border rounded-none"}>
+                        <TableRow key={user.id} className={"h-[60px] border rounded-none hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"}>
                             <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol className="flex-[0.5]">
-                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
+                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200 dark:border-gray-700"}>
                                     <ImageWithSkeleton src={user.profileImage || user.employer?.profileImage || defaultImage} />
                                 </div>
                             </TableRowCol>
                             <TableRowCol className="flex-[1.2]">
                                 <Tooltip content={user.employer?.companyName || user.email.split('@')[0]}>
-                                    <h3 className="text-sm font-medium truncate">{user.employer?.companyName || user.email.split('@')[0]}</h3>
+                                    <h3 className="text-sm font-medium truncate dark:text-gray-300">{user.employer?.companyName || user.email.split('@')[0]}</h3>
                                 </Tooltip>
                             </TableRowCol>
                             <TableRowCol className="flex-[1.5]">
                                 <Tooltip content={user.email}>
-                                    <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(user.email)}>{user.email}</h3>
+                                    <h3 className="text-sm truncate cursor-pointer dark:text-gray-300" onClick={() => copyToClipboard(user.email)}>{user.email}</h3>
                                 </Tooltip>
                             </TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm">{user.employer?.companyName || "N/A"}</h3>
+                                <h3 className="text-sm dark:text-gray-400">{user.employer?.companyName || "N/A"}</h3>
                             </TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm">{new Date(user.createdAt).toLocaleDateString()}</h3>
+                                <h3 className="text-sm dark:text-gray-400">{new Date(user.createdAt).toLocaleDateString()}</h3>
                             </TableRowCol>
                             <TableRowCol>
                                 <div className={"w-full h-full flex justify-center items-center"}>
-                                    <Button className={`border font-normal ${user.status === 'ACTIVE' ? 'border-[#008F37] bg-[#E6F4EB] text-black' : 'border-red-500 bg-red-50 text-black'}`}>
+                                    <Button className={`border font-normal text-xs h-8 ${user.status === 'ACTIVE' ? 'border-[#008F37] bg-[#E6F4EB] text-black' : 'border-red-500 bg-red-50 text-black'}`}>
                                         {user.status}
                                     </Button>
                                 </div>
                             </TableRowCol>
                             <TableRowCol>
                                 <div className={"w-[70px] h-full flex justify-around items-center"}>
-                                    <LockIcon onClick={() => handleBlock(user.id)} className={`cursor-pointer ${user.status === 'SUSPENDED' ? 'text-gray-400' : 'text-red-500'}`} size={18} />
-                                    <Trash2 onClick={() => handleDelete(user.id)} className={"cursor-pointer text-red-500"} size={18} />
+                                    <LockIcon onClick={() => handleBlock(user.id)} className={`cursor-pointer ${user.status === 'SUSPENDED' ? 'text-gray-400' : 'text-orange-500 dark:text-orange-400'} hover:scale-110 transition-transform`} size={18} />
+                                    <Trash2 onClick={() => handleDelete(user.id)} className={"cursor-pointer text-red-500 dark:text-red-400 hover:scale-110 transition-transform"} size={18} />
                                 </div>
                             </TableRowCol>
                         </TableRow>

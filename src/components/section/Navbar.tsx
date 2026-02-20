@@ -47,8 +47,21 @@ export default function Navbar () {
         navigate("/");
     };
 
+    // Paths where search bar should be VISIBLE
+    const searchablePaths = [
+        "/sub-admin-management",
+        "/employer-management",
+        "/user-management", // If we add this later
+        "/help-and-support",
+        "/immigration-report",
+        "/system-audit-logs",
+        "/subscriber"
+    ];
+
+    const isSearchVisible = searchablePaths.includes(location.pathname);
+
     return (
-        <nav className="w-full h-[70px] border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-background/80 backdrop-blur-md sticky top-0 z-[50]">
+        <nav className="w-full h-[70px] border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-background/80 backdrop-blur-md sticky top-0 z-[50] shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
             <div className="w-full h-full px-8 flex justify-between items-center">
                 {/* Logo Section */}
                 <div className="flex items-center gap-8">
@@ -56,25 +69,27 @@ export default function Navbar () {
                         <ImageWithSkeleton src={Logo} />
                     </div>
                     
-                    {/* Global Search Bar */}
-                    <div className="hidden md:flex relative group">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#125BAC] dark:group-focus-within:text-blue-400 transition-colors" size={18} />
-                        <input 
-                            type="text" 
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                            placeholder="Search everything..." 
-                            className="bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-2.5 pl-10 pr-10 w-[300px] text-sm focus:ring-2 focus:ring-[#125BAC]/20 dark:focus:ring-blue-400/20 transition-all outline-none dark:text-gray-200"
-                        />
-                        {searchQuery && (
-                            <button 
-                                onClick={() => dispatch(clearSearch())}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 cursor-pointer"
-                            >
-                                <X size={14} />
-                            </button>
-                        )}
-                    </div>
+                    {/* Global Search Bar - Conditional Rendering */}
+                    {isSearchVisible && (
+                        <div className="hidden md:flex relative group animate-in fade-in zoom-in-95 duration-200">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#125BAC] dark:group-focus-within:text-blue-400 transition-colors" size={18} />
+                            <input 
+                                type="text" 
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search everything..." 
+                                className="bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-2.5 pl-10 pr-10 w-[300px] text-sm focus:ring-2 focus:ring-[#125BAC]/20 dark:focus:ring-blue-400/20 transition-all outline-none dark:text-gray-200"
+                            />
+                            {searchQuery && (
+                                <button 
+                                    onClick={() => dispatch(clearSearch())}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 cursor-pointer"
+                                >
+                                    <X size={14} />
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Actions Section */}
@@ -82,12 +97,12 @@ export default function Navbar () {
                     {/* User Management Indication */}
                     <button 
                         onClick={() => navigate("/employer-management")}
-                        className="p-2.5 text-gray-500 hover:text-[#125BAC] hover:bg-blue-50 rounded-xl transition-all relative cursor-pointer group"
+                        className="p-2.5 text-gray-500 dark:text-gray-400 hover:text-[#125BAC] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all relative cursor-pointer group"
                         title="Employer Management"
                     >
                         <Users size={22} className="group-hover:scale-110 transition-transform" />
                         {userCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white">
+                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-blue-600 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-gray-900">
                                 {userCount}
                             </span>
                         )}
@@ -96,12 +111,12 @@ export default function Navbar () {
                     {/* Messages Indication */}
                     <button 
                         onClick={() => navigate("/messages")}
-                        className="p-2.5 text-gray-500 hover:text-[#125BAC] hover:bg-blue-50 rounded-xl transition-all relative cursor-pointer group"
+                        className="p-2.5 text-gray-500 dark:text-gray-400 hover:text-[#125BAC] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all relative cursor-pointer group"
                         title="Messages"
                     >
                         <MessageSquare size={22} className="group-hover:scale-110 transition-transform" />
                         {messageCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-indigo-600 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white">
+                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-indigo-600 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-gray-900">
                                 {messageCount}
                             </span>
                         )}
@@ -110,12 +125,12 @@ export default function Navbar () {
                     {/* Notification Indication */}
                     <button 
                         onClick={() => navigate("/notifications")}
-                        className="p-2.5 text-gray-500 hover:text-[#125BAC] hover:bg-blue-50 rounded-xl transition-all relative cursor-pointer group"
+                        className="p-2.5 text-gray-500 dark:text-gray-400 hover:text-[#125BAC] dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all relative cursor-pointer group"
                         title="Notifications"
                     >
                         <Bell size={22} className="group-hover:scale-110 transition-transform" />
                         {notificationCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white">
+                            <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white flex justify-center items-center text-[10px] font-bold rounded-full ring-2 ring-white dark:ring-gray-900">
                                 {notificationCount}
                             </span>
                         )}

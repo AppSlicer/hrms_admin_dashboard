@@ -30,144 +30,52 @@ export default function OverviewTab() {
 
             {/* Additional Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <div className="bg-white h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border">
-                    <div className={"flex items-center justify-between border-b text-xl font-semibold mb-2 pb-2"}>
+                <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <div className={"flex items-center justify-between border-b dark:border-gray-800 text-xl font-semibold mb-2 pb-2 text-gray-900 dark:text-white"}>
                         <h4 className={""}>Total Company</h4>
                         <h4 className={""}>1000</h4>
                     </div>
-                    <div className={"flex items-center justify-between"}>
+                    <div className={"flex items-center justify-between text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2"}>
                         <h2>Company Name</h2>
                         <h2>Employee</h2>
                     </div>
-                    <div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
+                    <div className="overflow-y-auto h-[160px] custom-scrollbar pr-2">
+                        {[1,2,3,4,5,6,7,8].map((i) => (
+                            <div key={i} className={"flex items-center justify-between mt-2 font-semibold text-gray-700 dark:text-gray-300"}>
+                                <div className={"flex gap-2 items-center"}>
+                                    <Twitter size={16} className="text-blue-400" />
+                                    <h3 className="text-sm">Amariko Co.</h3>
+                                </div>
+                                <h3 className="text-sm">1233</h3>
                             </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
+                        ))}
                     </div>
                 </div>
-                <div className="bg-white h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border">
-                    <div className={"flex items-center justify-between border-b text-xl font-semibold mb-2 pb-2"}>
+
+                <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <div className={"flex items-center justify-between border-b dark:border-gray-800 text-xl font-semibold mb-2 pb-2 text-gray-900 dark:text-white"}>
                         <h4 className={""}>Total Sub Admin</h4>
                         <h4 className={""}>1000</h4>
                     </div>
-                    <div className={"flex items-center justify-between"}>
+                    <div className={"flex items-center justify-between text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2"}>
                         <h2>Sub Admin</h2>
                         <h2>Company</h2>
                     </div>
-                    <div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
+                    <div className="overflow-y-auto h-[160px] custom-scrollbar pr-2">
+                        {[1,2,3,4,5,6,7,8].map((i) => (
+                            <div key={i} className={"flex items-center justify-between mt-2 font-semibold text-gray-700 dark:text-gray-300"}>
+                                <div className={"flex gap-2 items-center"}>
+                                    <Twitter size={16} className="text-blue-400" />
+                                    <h3 className="text-sm">MD Sohidul Islam</h3>
+                                </div>
+                                <h3 className="text-sm">12</h3>
                             </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
-                        <div className={"flex items-center justify-between mt-2 font-semibold"}>
-                            <div className={"flex gap-2"}>
-                                <Twitter />
-                                <h3>Amariko Co.</h3>
-                            </div>
-                            <h3>1233</h3>
-                        </div>
+                        ))}
                     </div>
                 </div>
-                <div className="bg-white h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border flex justify-center relative">
-                    <h3 className={"absolute z-10 text-xl font-semibold top-2"}>Sub Admin Earning</h3>
+
+                <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800 flex justify-center relative">
+                    <h3 className={"absolute z-10 text-xl font-semibold top-2 text-gray-900 dark:text-white"}>Sub Admin Earning</h3>
                     <GaugeChart value={20} max={100} label="Revenue" />
                 </div>
             </div>
