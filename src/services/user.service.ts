@@ -46,4 +46,8 @@ export const userService = {
       method: 'DELETE',
     });
   },
+
+  getUsersByRole: async (role: string) => {
+    return apiRequest<any[]>(`/users/role/${role}`);
+  },
 };

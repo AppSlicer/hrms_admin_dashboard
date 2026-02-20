@@ -268,7 +268,7 @@ export default function ProfileTabs() {
                             <Button 
                                 disabled={isUpdating || isUploading}
                                 onClick={handleUpdateProfile}
-                                className="mt-4 h-14 rounded-xl bg-[#125BAC] hover:bg-[#0e4a8a] text-white font-bold text-lg shadow-xl shadow-blue-200 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                                className="mt-4 h-14 rounded-xl bg-[#125BAC] hover:opacity-90 text-white font-bold text-lg shadow-xl shadow-blue-200 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 {isUpdating ? (
                                     <>
@@ -321,7 +321,7 @@ export default function ProfileTabs() {
                         <Button 
                             disabled={isUpdating}
                             onClick={handleChangePassword}
-                            className="mt-4 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all active:scale-95 shadow-lg shadow-blue-100"
+                            className="mt-4 h-12 rounded-xl bg-blue-600 hover:opacity-90 text-white font-bold text-lg transition-all active:scale-95 shadow-lg shadow-blue-100"
                         >
                             {isUpdating ? "Processing..." : "Change Password"}
                         </Button>

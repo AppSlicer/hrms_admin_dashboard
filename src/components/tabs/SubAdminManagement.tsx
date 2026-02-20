@@ -97,7 +97,7 @@ export default function SubAdminManagement() {
                 <div className={"gap-2 flex z-20"}>
                     <Button 
                         onClick={() => setIsAdding(!isAdding)}
-                        className={"bg-[#125BAC] text-white rounded-full cursor-pointer"}
+                        className={"bg-[#125BAC] text-white rounded-full"}
                     >
                         {isAdding ? "Cancel" : "Add Sub Admin"}
                     </Button>

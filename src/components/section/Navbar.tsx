@@ -3,14 +3,33 @@ import Profile from "../ui/Profile.tsx";
 import { Bell, MessageSquare, Users, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
+import { useEffect, useState } from "react";
+import { notificationService } from "@/services/notification.service";
 
 export default function Navbar () {
     const navigate = useNavigate();
+    const [notificationCount, setNotificationCount] = useState(0);
 
-    // Mock data for indications
-    const userCount = 2;
-    const notificationCount = 8;
-    const messageCount = 9;
+    // Mock data for other indications (default to 0)
+    const userCount = 0;
+    const messageCount = 0;
+
+    const fetchUnreadCount = async () => {
+        try {
+            const data = await notificationService.getUnreadCount();
+            setNotificationCount(data.count || 0);
+        } catch (error) {
+            console.error("Failed to fetch unread count", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUnreadCount();
+        
+        // Optional: Poll every 30 seconds to keep the count fresh
+        const interval = setInterval(fetchUnreadCount, 30000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <nav className="w-full h-[70px] border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-[50]">

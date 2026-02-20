@@ -169,11 +169,11 @@ export default function SignInPage() {
                             </form>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
-                            <Button disabled={isLoading} onClick={() => signIn()} type="submit" className="w-full rounded-full py-5 bg-linear-to-l from-[#0170DA] to-[#002282] cursor-pointer">
+                            <Button disabled={isLoading} onClick={() => signIn()} type="submit" className="w-full rounded-full py-5 bg-linear-to-l from-[#0170DA] to-[#002282]">
                                 {isLoading ? "Signing In..." : "Sign In"}
                             </Button>
                             <div className="p-[1px] rounded-full w-full bg-gradient-to-r from-[#4A58F9] to-[#8BEAFE]">
-                                <Button onClick={() => googleAuth()} variant="outline" className="w-full rounded-full py-5 cursor-pointer">
+                                <Button onClick={() => googleAuth()} variant="outline" className="w-full rounded-full py-5">
                                     <div className={"w-[20px] h-[20px]"}>
                                         <ImageWithSkeleton
                                             src={GoogleImage}
