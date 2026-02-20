@@ -54,8 +54,9 @@ export default function ProfileTabs() {
                 setName(displayName);
                 setContact(data.profile?.phoneNumber || "");
             } else {
-                displayName = data.email.split('@')[0];
+                displayName = `${data.firstName || ""} ${data.lastName || ""}`.trim() || data.email.split('@')[0];
                 setName(displayName);
+                setContact(data.phoneNumber || "");
             }
 
             // Sync to global state so Sidebar and Navbar update
@@ -118,7 +119,7 @@ export default function ProfileTabs() {
             
             if (profile.role === 'EMPLOYER') {
                 payload.companyName = name;
-            } else if (profile.role === 'EMPLOYEE') {
+            } else {
                 const parts = name.split(' ');
                 payload.firstName = parts[0];
                 payload.lastName = parts.slice(1).join(' ');
