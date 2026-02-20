@@ -11,16 +11,18 @@ export default function App () {
     const dispatch = useDispatch();
 
     useEffect(() => {
-
         const token = Cookies.get(TOKEN_NAME.HRM_FIRM);
-        const user = Cookies.get(TOKEN_NAME.USER_INFO);
+        const userCookie = Cookies.get(TOKEN_NAME.USER_INFO);
 
-        if ( user && token )
-            dispatch(login({token: JSON.parse(token), user: JSON.parse(user)}));
-        else if ( !user && !token )
-            dispatch(login({token: undefined, user: undefined}));
-
-    }, []);
+        if (userCookie && token) {
+            try {
+                const user = JSON.parse(userCookie);
+                dispatch(login({ token: token, user: user }));
+            } catch (e) {
+                console.error("Failed to parse user info", e);
+            }
+        }
+    }, [dispatch]);
 
     return (
         <>
