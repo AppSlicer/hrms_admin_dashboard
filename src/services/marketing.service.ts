@@ -12,6 +12,21 @@ export const marketingService = {
     return apiRequest<any[]>('/marketing/campaigns');
   },
 
+  getCampaignById: async (id: string) => {
+    return apiRequest<any>(`/marketing/campaigns/${id}`);
+  },
+
+  getQueueStats: async () => {
+    return apiRequest<any>('/marketing/queue-stats');
+  },
+
+  updateCampaign: async (id: string, data: any) => {
+    return apiRequest<any>(`/marketing/campaigns/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
   deleteCampaign: async (id: string) => {
     return apiRequest<any>(`/marketing/campaigns/${id}`, {
       method: 'DELETE',
@@ -21,6 +36,7 @@ export const marketingService = {
   startCampaign: async (id: string) => {
     return apiRequest<any>(`/marketing/campaigns/${id}/start`, {
       method: 'POST',
+      body: JSON.stringify({}),
     });
   },
 };
