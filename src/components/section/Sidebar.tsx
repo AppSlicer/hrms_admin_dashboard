@@ -48,7 +48,7 @@ export default function Sidebar() {
     const TabItem = useCallback(({ item, isActive }: { item: any; isActive: boolean }) => (
         <button
             onClick={() => setTab(item.title)}
-            className={`group relative h-[46px] w-[90%] flex justify-start items-center gap-3 px-4 mb-1 cursor-pointer transition-all duration-300 rounded-xl overflow-hidden ${
+            className={`group relative min-h-[46px] py-2 w-[90%] flex justify-start items-center gap-3 px-4 mb-1 cursor-pointer transition-all duration-300 rounded-xl overflow-hidden ${
                 isActive
                     ? 'bg-white/10 text-white shadow-sm'
                     : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
@@ -59,8 +59,8 @@ export default function Sidebar() {
                 <div className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-white rounded-r-full" />
             )}
             
-            <item.icon size={20} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
-            <span className={`text-sm font-semibold transition-all duration-300 ${isActive ? 'tracking-wide' : 'tracking-normal'}`}>
+            <item.icon size={20} className={`shrink-0 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+            <span className={`text-sm font-semibold text-left leading-tight transition-all duration-300 ${isActive ? 'tracking-wide' : 'tracking-normal'}`}>
                 {item.title}
             </span>
         </button>
@@ -71,13 +71,13 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="w-[260px] md:w-[280px] lg:w-[300px] h-full flex flex-col items-center py-6 shrink-0 bg-gray-50/50 border-r border-gray-200">
-            <div className="w-[90%] h-full bg-[#125BAC] shadow-2xl shadow-blue-900/20 rounded-[2rem] relative flex flex-col items-center py-8 overflow-hidden">
+        <div className="w-[260px] md:w-[280px] lg:w-[300px] h-full flex flex-col items-center py-4 shrink-0 bg-gray-50/50 border-r border-gray-200">
+            <div className="w-[90%] h-full bg-[#125BAC] shadow-2xl shadow-blue-900/20 rounded-[2rem] relative flex flex-col items-center pt-6 pb-4 overflow-hidden">
                 {/* Decorative background element */}
                 <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
                 
-                <div className="w-full flex flex-col items-center gap-1 overflow-y-auto custom-scrollbar px-2 flex-1">
-                    <div className="w-full px-6 mb-4">
+                <div className="w-full flex flex-col items-center gap-1 overflow-y-auto custom-scrollbar px-2 flex-1 scroll-smooth">
+                    <div className="w-full px-6 mb-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200/50">Menu</p>
                     </div>
                     
@@ -85,7 +85,7 @@ export default function Sidebar() {
                         tabs.map((item, idx) => (
                             <React.Fragment key={item.title}>
                                 {idx === 1 && (
-                                    <div className="w-full px-6 mt-6 mb-2">
+                                    <div className="w-full px-6 mt-4 mb-2">
                                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200/50">Management</p>
                                     </div>
                                 )}
@@ -104,13 +104,13 @@ export default function Sidebar() {
                     )}
                 </div>
 
-                {/* Logout area */}
-                <div className="w-full px-4 mt-auto pt-6 border-t border-white/10">
+                {/* Logout area - More compact */}
+                <div className="w-full px-4 mt-2 pt-2 border-t border-white/5">
                     <button
                         onClick={logOut}
-                        className="w-full h-[46px] flex items-center gap-3 px-6 text-red-200 hover:text-white hover:bg-red-500/20 rounded-xl transition-all duration-300 cursor-pointer group"
+                        className="w-full h-[40px] flex items-center gap-3 px-6 text-red-200/80 hover:text-white hover:bg-red-500/20 rounded-xl transition-all duration-300 cursor-pointer group"
                     >
-                        <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
+                        <LogOut size={16} className="group-hover:-translate-x-1 transition-transform" />
                         <span className="text-sm font-bold">Logout</span>
                     </button>
                 </div>
