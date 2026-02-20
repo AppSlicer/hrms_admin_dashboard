@@ -1,11 +1,11 @@
 import { LogOut } from "lucide-react";
 import Cookies from "js-cookie";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { TOKEN_NAME } from "@/enum/token.enum.ts";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store.ts";
 import { USER_ROLE_ENUM } from "@/enum/role.enum.ts";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useMemo, useCallback } from "react";
 import { setTabOnState } from "@/redux/reducers/tabSlice.ts";
 import { admin, subAdmin } from "@/enum/tab.enum.ts";
 
@@ -48,14 +48,21 @@ export default function Sidebar() {
     const TabItem = useCallback(({ item, isActive }: { item: any; isActive: boolean }) => (
         <button
             onClick={() => setTab(item.title)}
-            className={`h-[50px] w-[95%] rounded-bl-full rounded-tl-full flex justify-start items-center gap-3 pl-4 cursor-pointer duration-200 ease-in-out ${
+            className={`group relative h-[46px] w-[90%] flex justify-start items-center gap-3 px-4 mb-1 cursor-pointer transition-all duration-300 rounded-xl overflow-hidden ${
                 isActive
-                    ? 'text-[#125BAC] bg-white'
-                    : 'text-white hover:bg-blue-600'
+                    ? 'bg-white/10 text-white shadow-sm'
+                    : 'text-blue-100/70 hover:bg-white/5 hover:text-white'
             }`}
         >
-            <item.icon size={18} />
-            <span className="font-bold text-sm whitespace-nowrap">{item.title}</span>
+            {/* Active Indicator Line */}
+            {isActive && (
+                <div className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-white rounded-r-full" />
+            )}
+            
+            <item.icon size={20} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+            <span className={`text-sm font-semibold transition-all duration-300 ${isActive ? 'tracking-wide' : 'tracking-normal'}`}>
+                {item.title}
+            </span>
         </button>
     ), [setTab]);
 
@@ -64,33 +71,50 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="w-[260px] md:w-[300px] lg:w-[350px] h-full flex justify-center items-center relative shrink-0">
-            <div className="w-[240px] md:w-[280px] lg:w-[320px] pt-4 h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end shadow-xl">
-                {user.role === USER_ROLE_ENUM.SUPER_ADMIN || user.role === USER_ROLE_ENUM.SUB_ADMIN ? (
-                    tabs.map((item) => (
-                        <TabItem
-                            key={item.title}
-                            item={item}
-                            isActive={item.title === activeTab}
-                        />
-                    ))
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center p-4">
-                        <h1 className="text-white text-center font-medium">
-                            This is not an admin account
-                        </h1>
+        <div className="w-[260px] md:w-[280px] lg:w-[300px] h-full flex flex-col items-center py-6 shrink-0 bg-gray-50/50 border-r border-gray-200">
+            <div className="w-[90%] h-full bg-[#125BAC] shadow-2xl shadow-blue-900/20 rounded-[2rem] relative flex flex-col items-center py-8 overflow-hidden">
+                {/* Decorative background element */}
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
+                
+                <div className="w-full flex flex-col items-center gap-1 overflow-y-auto custom-scrollbar px-2 flex-1">
+                    <div className="w-full px-6 mb-4">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200/50">Menu</p>
                     </div>
-                )}
-            </div>
+                    
+                    {user.role === USER_ROLE_ENUM.SUPER_ADMIN || user.role === USER_ROLE_ENUM.SUB_ADMIN ? (
+                        tabs.map((item, idx) => (
+                            <React.Fragment key={item.title}>
+                                {idx === 1 && (
+                                    <div className="w-full px-6 mt-6 mb-2">
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200/50">Management</p>
+                                    </div>
+                                )}
+                                <TabItem
+                                    item={item}
+                                    isActive={item.title === activeTab}
+                                />
+                            </React.Fragment>
+                        ))
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                            <h1 className="text-white text-center font-medium opacity-60">
+                                Restricted Access
+                            </h1>
+                        </div>
+                    )}
+                </div>
 
-            {/* Logout button */}
-            <button
-                onClick={logOut}
-                className="absolute cursor-pointer bottom-9 left-12 text-white flex gap-2 items-center hover:text-blue-200 duration-200 z-30"
-            >
-                <LogOut size={18} />
-                <span className="font-medium">Logout</span>
-            </button>
+                {/* Logout area */}
+                <div className="w-full px-4 mt-auto pt-6 border-t border-white/10">
+                    <button
+                        onClick={logOut}
+                        className="w-full h-[46px] flex items-center gap-3 px-6 text-red-200 hover:text-white hover:bg-red-500/20 rounded-xl transition-all duration-300 cursor-pointer group"
+                    >
+                        <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-sm font-bold">Logout</span>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

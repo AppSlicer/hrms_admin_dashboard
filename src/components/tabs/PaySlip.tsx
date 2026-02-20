@@ -21,9 +21,7 @@ export default function PaySlip() {
 
     const [open, setOpen] = useState<boolean>(false);
     const [date, setDate] = useState<Date>( new Date( Date.now() ) );
-    const [status, setStatus] = useState<string>();
-
-    console.log("Console from the status -:- ",status);
+    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>

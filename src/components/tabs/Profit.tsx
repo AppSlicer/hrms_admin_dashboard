@@ -16,9 +16,7 @@ import {EyeOff, LockIcon} from "lucide-react";
 
 export default function ProfitManagement() {
 
-    const [status, setStatus] = useState<string>();
-
-    console.log("Console from the status -:- ",status);
+    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>
