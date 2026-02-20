@@ -14,7 +14,7 @@ import {toast} from "sonner";
 import Tooltip from "@/components/ui/Tooltip";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function UserManagement() {
     const searchQuery = useSelector((state: RootState) => state.search.query);

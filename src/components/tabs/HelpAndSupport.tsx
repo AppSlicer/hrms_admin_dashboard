@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Tooltip from "@/components/ui/Tooltip";
 import { io } from "socket.io-client";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 import {
     DropdownMenu,

@@ -37,14 +37,14 @@ export default function ForgotPasswordPage() {
                     <Card className="w-full max-w-sm shadow-md">
                         <CardHeader>
                             <CardTitle className={"text-center"}>
-                                <div className={"rounded-full mx-auto w-[35px] h-[35px] p-1 flex justify-center items-center shadow-md"}>
-                                    <Key color={"#1828B5"} />
+                                <div className={"rounded-full mx-auto w-[35px] h-[35px] p-1 flex justify-center items-center shadow-md bg-card"}>
+                                    <Key className="text-primary" />
                                 </div>
                             </CardTitle>
                             <CardDescription>
                                 <div className={"w-full h-full text-center"}>
-                                    <h1 className={"text-xl font-semibold text-gray-900"}>Forgot password?</h1>
-                                    <p className={"text-sm mt-2"}>No worries, wei'll send reset instructions.</p>
+                                    <h1 className={"text-xl font-semibold text-foreground"}>Forgot password?</h1>
+                                    <p className={"text-sm mt-2 text-muted-foreground"}>No worries, we'll send reset instructions.</p>
                                 </div>
                             </CardDescription>
                             {/*<CardAction>*/}
@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
                                                 type="email"
                                                 placeholder="m@example.com"
                                                 required
-                                                className="py-5 rounded-full w-full bg-white text-gray-800 "
+                                                className="py-5 rounded-full w-full bg-card text-foreground "
                                             />
                                         </div>
                                     </div>
@@ -75,10 +75,10 @@ export default function ForgotPasswordPage() {
                             <Button onClick={() => handleSubmit()} type="submit" className="w-full rounded-full py-5 bg-linear-to-l from-[#0170DA] to-[#002282] cursor-pointer">
                                 Submit
                             </Button>
-                            <CardTitle className="text-center text-sm mt-2 font-normal text-gray-600">
+                            <CardTitle className="text-center text-sm mt-2 font-normal">
                                 <span className="font-semibold bg-gradient-to-r from-[#002282] to-[#0170DA] bg-clip-text text-transparent hover:opacity-80 transition-all duration-300">
-                                    <Link to="/sign-in" className={"flex justify-center items-center text-[#667085]"}>
-                                        <ArrowLeft color={"#667085"} />
+                                    <Link to="/sign-in" className={"flex justify-center items-center text-muted-foreground hover:text-foreground transition-colors"}>
+                                        <ArrowLeft className="mr-2" size={18} />
                                         Back to log in
                                     </Link>
                                 </span>

@@ -2,7 +2,7 @@ import type { ReactNode} from "react";
 
 function AuthLayout ({ children }: { children: ReactNode }) {
     return (
-        <main className={"w-full min-h-svh relative flex justify-center items-center bg-white overflow-hidden"}>
+        <main className={"w-full min-h-svh relative flex justify-center items-center bg-white dark:bg-slate-950 overflow-hidden"}>
 
             {/* Round Elements */}
             <div className={"absolute -top-[50vh] -left-[60vh] xl:-left-[40vh] xl:-top-[70vh] w-[120vh] xl:w-[150vh] h-[120vh] xl:h-[150vh] rounded-full bg-gradient-to-r from-[#002282] to-[#0170DA]"} />

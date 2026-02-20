@@ -6,7 +6,7 @@ import {ChevronDownIcon} from "lucide-react";
 import {useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Calendar} from "@/components/ui/calendar.tsx";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function AttendanceManagement() {
     const [open, setOpen] = useState<boolean>(false);

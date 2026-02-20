@@ -38,7 +38,7 @@ export default function NotFound() {
 
             {/* Subtle Decoration */}
             <div className="absolute bottom-6 text-gray-600 text-sm select-none">
-                © {new Date().getFullYear()} Your App Name
+                © {new Date().getFullYear()} HRM Firm
             </div>
         </div>
     )

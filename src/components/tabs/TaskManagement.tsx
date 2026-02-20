@@ -6,7 +6,7 @@ import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {ChevronDownIcon, EyeOff, LockIcon} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Calendar} from "@/components/ui/calendar.tsx";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function TaskManagement() {
     const [open, setOpen] = useState(false);

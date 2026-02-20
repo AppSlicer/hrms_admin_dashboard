@@ -8,7 +8,7 @@ import {
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
 import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function HrmcAuditReport() {
 

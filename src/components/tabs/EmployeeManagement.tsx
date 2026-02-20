@@ -10,7 +10,7 @@ import {Label} from "@/components/ui/label.tsx";
 import Tooltip from "@/components/ui/Tooltip";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store";
-import ReusableTable, { Column } from "@/components/ui/ReusableTable";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function EmployeeManagement() {
     const searchQuery = useSelector((state: RootState) => state.search.query);

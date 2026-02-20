@@ -66,7 +66,7 @@ export default function SignUpPage() {
                                                 type="name"
                                                 placeholder="name"
                                                 required
-                                                className="py-5 rounded-full w-full bg-white text-gray-800 "
+                                                className="py-5 rounded-full w-full bg-card text-foreground "
                                             />
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@ export default function SignUpPage() {
                                                 type="email"
                                                 placeholder="m@example.com"
                                                 required
-                                                className="py-5 rounded-full w-full bg-white text-gray-800 "
+                                                className="py-5 rounded-full w-full bg-card text-foreground "
                                             />
                                         </div>
                                     </div>
@@ -90,14 +90,14 @@ export default function SignUpPage() {
                                             {
                                                 isPasswordOn? (
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9 text-[#1828B5]"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsPasswordOn(!isPasswordOn)}
                                                     >
                                                         <EyeIcon size={19} />
                                                     </div>
                                                 ):(
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9 text-[#1828B5]"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsPasswordOn(!isPasswordOn)}
                                                     >
                                                         <EyeOffIcon size={19} />
@@ -112,7 +112,7 @@ export default function SignUpPage() {
                                                 required
                                                 value={password}
                                                 placeholder="password"
-                                                className={"py-5 rounded-full w-full bg-white text-gray-800"}
+                                                className={"py-5 rounded-full w-full bg-card text-foreground"}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                         </div>
@@ -123,14 +123,14 @@ export default function SignUpPage() {
                                             {
                                                 isConfirmPasswordOn? (
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9 text-[#1828B5]"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsConfirmPasswordOn(!isConfirmPasswordOn)}
                                                     >
                                                         <EyeIcon size={19} />
                                                     </div>
                                                 ):(
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9 text-[#1828B5]"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsConfirmPasswordOn(!isConfirmPasswordOn)}
                                                     >
                                                         <EyeOffIcon size={19} />
@@ -145,7 +145,7 @@ export default function SignUpPage() {
                                                 required
                                                 value={confirmPassword}
                                                 placeholder="confirm password"
-                                                className={"py-5 rounded-full w-full bg-white text-gray-800"}
+                                                className={"py-5 rounded-full w-full bg-card text-foreground"}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                             />
                                         </div>
@@ -164,7 +164,7 @@ export default function SignUpPage() {
                                 Sign Up
                             </Button>
                             <div className="p-[1px] rounded-full w-full bg-gradient-to-r from-[#4A58F9] to-[#8BEAFE]">
-                                <Button onClick={()=> googleAuth()} variant="outline" className="w-full rounded-full py-5 cursor-pointer">
+                                <Button onClick={()=> googleAuth()} variant="outline" className="w-full rounded-full py-5 bg-card hover:bg-accent transition-colors cursor-pointer">
                                     <div className={"w-[20px] h-[20px]"}>
                                         <ImageWithSkeleton
                                             src={GoogleImage}
@@ -173,7 +173,7 @@ export default function SignUpPage() {
                                     Sign up with Google
                                 </Button>
                             </div>
-                            <CardTitle className="text-center text-sm mt-2 font-normal text-gray-600">
+                            <CardTitle className="text-center text-sm mt-2 font-normal text-muted-foreground">
                                 Already have an account?{" "}
                                 <span className="font-semibold bg-gradient-to-r from-[#002282] to-[#0170DA] bg-clip-text text-transparent hover:opacity-80 transition-all duration-300">
                                     <Link to="/sign-in">Log in</Link>

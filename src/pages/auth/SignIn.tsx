@@ -122,7 +122,7 @@ export default function SignInPage() {
                                                 type="email"
                                                 placeholder="m@example.com"
                                                 required
-                                                className="py-5 rounded-full w-full bg-white text-gray-800 "
+                                                className="py-5 rounded-full w-full bg-card text-foreground "
                                             />
                                         </div>
                                     </div>
@@ -132,14 +132,14 @@ export default function SignInPage() {
                                             {
                                                 isPasswordOn? (
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsPasswordOn(!isPasswordOn)}
                                                     >
                                                         <EyeIcon size={19} />
                                                     </div>
                                                 ):(
                                                     <div
-                                                        className={"cursor-pointer absolute right-4 top-9"}
+                                                        className={"cursor-pointer absolute right-4 top-9 text-muted-foreground"}
                                                         onClick={() => setIsPasswordOn(!isPasswordOn)}
                                                     >
                                                         <EyeOffIcon size={19} />
@@ -154,13 +154,13 @@ export default function SignInPage() {
                                                 required
                                                 value={password}
                                                 placeholder="password"
-                                                className={"py-5 rounded-full w-full bg-white text-gray-800"}
+                                                className={"py-5 rounded-full w-full bg-card text-foreground"}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                         </div>
                                             <Link
                                                 to={"/forgot-password"}
-                                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-muted-foreground"
                                             >
                                                 Forgot your password?
                                             </Link>
@@ -173,7 +173,7 @@ export default function SignInPage() {
                                 {isLoading ? "Signing In..." : "Sign In"}
                             </Button>
                             <div className="p-[1px] rounded-full w-full bg-gradient-to-r from-[#4A58F9] to-[#8BEAFE]">
-                                <Button onClick={() => googleAuth()} variant="outline" className="w-full rounded-full py-5">
+                                <Button onClick={() => googleAuth()} variant="outline" className="w-full rounded-full py-5 bg-card hover:bg-accent transition-colors">
                                     <div className={"w-[20px] h-[20px]"}>
                                         <ImageWithSkeleton
                                             src={GoogleImage}
@@ -182,7 +182,7 @@ export default function SignInPage() {
                                     Login with Google
                                 </Button>
                             </div>
-                            <CardTitle className="text-center text-sm mt-2 font-normal text-gray-600">
+                            <CardTitle className="text-center text-sm mt-2 font-normal text-muted-foreground">
                                 Don’t have an account?{" "}
                                 <span className="font-semibold bg-gradient-to-r from-[#002282] to-[#0170DA] bg-clip-text text-transparent hover:opacity-80 transition-all duration-300">
                                     <Link to="/sign-up">Sign Up</Link>
