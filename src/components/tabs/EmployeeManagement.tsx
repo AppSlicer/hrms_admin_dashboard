@@ -1,16 +1,10 @@
 import {Button} from "@/components/ui/button.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
 import {useEffect, useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {EyeOff, LockIcon, Trash2} from "lucide-react";
+import {LockIcon, Trash2} from "lucide-react";
 import {userService} from "@/services/user.service.ts";
 import {toast} from "sonner";
 import {Input} from "@/components/ui/input.tsx";
@@ -28,6 +22,8 @@ export default function EmployeeManagement() {
         companyName: "",
         phoneNumber: ""
     });
+
+    const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
 
     const fetchEmployers = async () => {
         setIsLoading(true);
@@ -62,7 +58,7 @@ export default function EmployeeManagement() {
         const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
         try {
             await userService.updateStatus(id, newStatus);
-            toast.success(`Employer marked as ${newStatus.toLowerCase()}`);
+            toast.success(`User status updated to ${newStatus}`);
             fetchEmployers();
         } catch (error: any) {
             toast.error(error.message || "Failed to update status");
@@ -161,6 +157,7 @@ export default function EmployeeManagement() {
                 {/* Table Heading*/}
                 <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
                     <TableRowCol><h3>SL</h3></TableRowCol>
+                    <TableRowCol><h3>Image</h3></TableRowCol>
                     <TableRowCol><h3>Company Name</h3></TableRowCol>
                     <TableRowCol><h3>Email</h3></TableRowCol>
                     <TableRowCol><h3>Contact</h3></TableRowCol>
@@ -181,6 +178,11 @@ export default function EmployeeManagement() {
                     employers.map((emp, index) => (
                         <TableRow key={emp.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol><h3>{index + 1}</h3></TableRowCol>
+                            <TableRowCol>
+                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
+                                    <ImageWithSkeleton src={emp.profileImage || emp.employer?.profileImage || defaultImage} />
+                                </div>
+                            </TableRowCol>
                             <TableRowCol>
                                 <h3 className="text-sm font-medium">{emp.employer?.companyName || "N/A"}</h3>
                             </TableRowCol>

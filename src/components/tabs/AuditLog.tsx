@@ -5,7 +5,6 @@ import {
     DropdownMenuGroup, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuTrigger
 } from "@radix-ui/react-dropdown-menu";
-import {useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
@@ -14,8 +13,6 @@ import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
 
 export default function AuditLog() {
-
-    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>
@@ -31,8 +28,8 @@ export default function AuditLog() {
                         <DropdownMenuContent className="w-56 border rounded-xl bg-white p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>User Role</DropdownMenuLabel>
                             <DropdownMenuGroup className={""}>
-                                <DropdownMenuItem onClick={() => setStatus("active")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setStatus("in-active")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>

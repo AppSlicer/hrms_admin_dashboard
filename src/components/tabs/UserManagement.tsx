@@ -9,10 +9,8 @@ import {useEffect, useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
-import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {EyeOff, LockIcon, Trash2} from "lucide-react";
+import {LockIcon, Trash2} from "lucide-react";
 import {userService} from "@/services/user.service.ts";
 import {toast} from "sonner";
 
@@ -20,6 +18,8 @@ export default function UserManagement() {
     const [data, setData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [userType, setUserType] = useState<"EMPLOYER" | "EMPLOYEE">("EMPLOYER");
+
+    const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -86,6 +86,7 @@ export default function UserManagement() {
             <Table totalPages={1} className={""}>
                 <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
                     <TableRowCol><h3>SL</h3></TableRowCol>
+                    <TableRowCol><h3>Image</h3></TableRowCol>
                     <TableRowCol><h3>Name</h3></TableRowCol>
                     <TableRowCol><h3>Email</h3></TableRowCol>
                     <TableRowCol><h3>Company</h3></TableRowCol>
@@ -107,8 +108,11 @@ export default function UserManagement() {
                         <TableRow key={user.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm font-medium">{user.employer?.companyName || user.email.split('@')[0]}</h3>
+                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
+                                    <ImageWithSkeleton src={user.profileImage || user.employer?.profileImage || defaultImage} />
+                                </div>
                             </TableRowCol>
+                            <TableRowCol>
                             <TableRowCol>
                                 <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(user.email)}>{user.email}</h3>
                             </TableRowCol>

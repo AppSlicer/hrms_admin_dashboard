@@ -1,10 +1,4 @@
 import {Button} from "@/components/ui/button.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
 import {useEffect, useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
@@ -12,7 +6,7 @@ import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
 import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {EyeOff, LockIcon, Plus, Trash2} from "lucide-react";
+import {LockIcon, Trash2} from "lucide-react";
 import {userService} from "@/services/user.service.ts";
 import {toast} from "sonner";
 import {Input} from "@/components/ui/input.tsx";
@@ -30,6 +24,8 @@ export default function SubAdminManagement() {
         name: "",
         phoneNumber: ""
     });
+
+    const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
 
     const fetchSubAdmins = async () => {
         setIsLoading(true);
@@ -75,7 +71,7 @@ export default function SubAdminManagement() {
         const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
         try {
             await userService.updateStatus(id, newStatus);
-            toast.success(`Sub-admin marked as ${newStatus.toLowerCase()}`);
+            toast.success(`User status updated to ${newStatus}`);
             fetchSubAdmins();
         } catch (error: any) {
             toast.error(error.message || "Failed to update status");
@@ -184,8 +180,8 @@ export default function SubAdminManagement() {
                         <TableRow key={admin.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol>
-                                <div className={"w-[30px] h-[30px] rounded-full overflow-hidden"}>
-                                    <ImageWithSkeleton src={ImageStatic} />
+                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
+                                    <ImageWithSkeleton src={admin.profileImage || defaultImage} />
                                 </div>
                             </TableRowCol>
                             <TableRowCol>

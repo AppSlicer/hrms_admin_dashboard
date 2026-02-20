@@ -5,7 +5,6 @@ import {
     DropdownMenuGroup, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuTrigger
 } from "@radix-ui/react-dropdown-menu";
-import {useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
@@ -15,8 +14,6 @@ import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {EyeOff, LockIcon} from "lucide-react";
 
 export default function ProfitManagement() {
-
-    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>
@@ -32,8 +29,8 @@ export default function ProfitManagement() {
                         <DropdownMenuContent className="w-56 border rounded-xl bg-white p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Month</DropdownMenuLabel>
                             <DropdownMenuGroup className={""}>
-                                <DropdownMenuItem onClick={() => setStatus("active")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>January</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setStatus("in-active")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>February</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>January</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>February</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>

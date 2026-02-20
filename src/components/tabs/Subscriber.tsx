@@ -5,7 +5,6 @@ import {
     DropdownMenuGroup, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuTrigger
 } from "@radix-ui/react-dropdown-menu";
-import {useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
@@ -15,8 +14,6 @@ import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {EyeOff, LockIcon} from "lucide-react";
 
 export default function Subscriber() {
-
-    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>
@@ -32,8 +29,8 @@ export default function Subscriber() {
                         <DropdownMenuContent className="w-56 border rounded-xl bg-white p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Role</DropdownMenuLabel>
                             <DropdownMenuGroup className={""}>
-                                <DropdownMenuItem onClick={() => setStatus("Employee")} className={"p-2 bg-green-100 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setStatus("Employer")} className={"p-2 bg-red-100 rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 bg-green-100 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 bg-red-100 rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -44,8 +41,8 @@ export default function Subscriber() {
                         <DropdownMenuContent className="w-56 border rounded-xl bg-white p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Status</DropdownMenuLabel>
                             <DropdownMenuGroup className={""}>
-                                <DropdownMenuItem onClick={() => setStatus("Active")} className={"p-2 bg-green-100 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Active</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setStatus("Expired")} className={"p-2 bg-red-100 rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Expired</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 bg-green-100 rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Active</DropdownMenuItem>
+                                <DropdownMenuItem className={"p-2 bg-red-100 rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Expired</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -278,5 +275,5 @@ export default function Subscriber() {
                 </TableRow>
             </Table>
         </div>
-    )
+    );
 }

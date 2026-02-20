@@ -1,8 +1,8 @@
 import DashboardLayout from "@/layout/DashboardLayout.tsx";
 import {useSelector} from "react-redux";
-import type {RootState} from "@/redux/stores/store.ts";
+import type { RootState } from "@/redux/stores/store.ts";
 import OverViewTab from "@/components/tabs/Overview.tsx";
-import {admin, subAdmin} from "@/enum/tab.enum.ts";
+import { admin, subAdmin } from "@/enum/tab.enum.ts";
 import SubAdminManagement from "@/components/tabs/SubAdminManagement.tsx";
 import EmployeeManagement from "@/components/tabs/EmployeeManagement.tsx";
 import Profits from "@/components/tabs/Profit.tsx";
@@ -13,7 +13,6 @@ import TermsAndCondition from "@/components/tabs/TermsAndCondition.tsx";
 import PrivacyPolicies from "@/components/tabs/PrivacyPolicy.tsx";
 import ProfileTabs from "@/components/tabs/ProfileTab.tsx";
 import HelpAndSupport from "@/components/tabs/HelpAndSupport.tsx";
-import UserManagement from "@/components/tabs/UserManagement.tsx";
 import AttendanceManagement from "@/components/tabs/AttendanceManagement.tsx";
 import LeaveManagement from "@/components/tabs/LeaveManagement.tsx";
 import TaskManagement from "@/components/tabs/TaskManagement.tsx";
@@ -21,10 +20,17 @@ import PaySlip from "@/components/tabs/PaySlip.tsx";
 import NotAvailable from "@/components/tabs/NotAvailable.tsx";
 import Subscriber from "@/components/tabs/Subscriber";
 import EmailMarketing from "@/components/tabs/EmailMarketing";
+import { useEffect } from "react";
 
 export default function HomePage () {
 
     const { tab } = useSelector( (state: RootState) => state.tab );
+
+    useEffect(() => {
+        if (tab) {
+            document.title = `HRMS - ${tab}`;
+        }
+    }, [tab]);
 
     return (
         <DashboardLayout>

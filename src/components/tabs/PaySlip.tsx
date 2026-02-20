@@ -21,7 +21,6 @@ export default function PaySlip() {
 
     const [open, setOpen] = useState<boolean>(false);
     const [date, setDate] = useState<Date>( new Date( Date.now() ) );
-    const [status, setStatus] = useState<string>("all");
 
     return (
         <div className={"w-full h-full p-6"}>
@@ -63,8 +62,8 @@ export default function PaySlip() {
                             <DropdownMenuContent className="w-56 border bg-white rounded-xl p-4 mr-8 mt-4" align="start">
                                 <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Users type</DropdownMenuLabel>
                                 <DropdownMenuGroup className={""}>
-                                    <DropdownMenuItem onClick={() => setStatus("active")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setStatus("in-active")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
+                                    <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
+                                    <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
