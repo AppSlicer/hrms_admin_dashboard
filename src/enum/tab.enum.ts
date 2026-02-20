@@ -20,7 +20,7 @@ import {
 export const admin = [
     { icon: LucideLayoutDashboard, title: "Overview" },
     { icon: TrainFrontTunnel, title: "Sub Admin Management" },
-    { icon: UserRound, title: "Employee Management" },
+    { icon: UserRound, title: "Employer Management" },
     { icon: ChartNetwork, title: "Profit" },
     { icon: ClipboardPlus, title: "Immigration Report" },
     { icon: UsersRound, title: "System Audit Logs" },
@@ -35,7 +35,7 @@ export const admin = [
 
 export const subAdmin = [
     { icon: LucideLayoutDashboard, title: "Overview" },
-    { icon: UsersRound, title: "User Management" },
+    { icon: UsersRound, title: "Employer Management" },
     { icon: Calendar1, title: "Attendance Management" },
     { icon: CalendarMinus, title: "Leave Management" },
     { icon: CalendarDays, title: "Task Management" },
