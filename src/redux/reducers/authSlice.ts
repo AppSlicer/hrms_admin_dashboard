@@ -1,10 +1,16 @@
 import type {AuthState} from "../../type/state/auth.type.ts";
 import {createSlice} from "@reduxjs/toolkit";
 import {REDUX_STATE_NAME} from "../../enum/state.enum.ts";
+import Cookies from "js-cookie";
+import {TOKEN_NAME} from "../../enum/token.enum.ts";
+
+const token = Cookies.get(TOKEN_NAME.HRM_FIRM) || null;
+const userCookie = Cookies.get(TOKEN_NAME.USER_INFO);
+const user = userCookie ? JSON.parse(userCookie) : null;
 
 const initialState: AuthState = {
-    user: null,
-    token: null,
+    user,
+    token,
 }
 
 const authSlice = createSlice({
@@ -18,6 +24,10 @@ const authSlice = createSlice({
         logout: (state) => {
             state.user = null;
             state.token = null;
+            Cookies.remove(TOKEN_NAME.HRM_FIRM);
+            Cookies.remove(TOKEN_NAME.USER_INFO);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
         },
     },
 });

@@ -13,46 +13,67 @@ import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {EyeIcon, EyeOffIcon} from "lucide-react";
 import Cookies from "js-cookie";
 import {TOKEN_NAME} from "@/enum/token.enum.ts";
-import type {IUser} from "@/type/state/user.type.ts";
 import {toast} from "sonner";
-import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
+import {authService} from "@/services/auth.service.ts";
+import {useDispatch} from "react-redux";
+import {login} from "@/redux/reducers/authSlice.ts";
 
 export default function SignInPage() {
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isPasswordOn, setIsPasswordOn] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const emailOnRole = {
-        admin: "admin@mail.com",
-        subAdmin: "subAdmin@mail.com"
-    }
+    // Sign in function updated with real API integration
+    const signIn = async () => {
+        if (!email || !password) {
+            toast.error("Please enter both email and password");
+            return;
+        }
 
-    // Sign in function added
-    const signIn = () => {
+        setIsLoading(true);
+        try {
+            const result = await authService.login({ email, password });
+            
+            const { accessToken, refreshToken, user } = result;
 
-        const payload = {email, password};
-        const user: IUser = {
-            id: "as32wdfasd",
-            image: "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=",
-            name: email,
-            role: emailOnRole.admin == email ? USER_ROLE_ENUM.ADMIN : USER_ROLE_ENUM.SUB_ADMIN,
-        };
+            // Map backend user to frontend IUser if needed
+            const frontendUser = {
+                id: user.id,
+                name: user.email.split('@')[0], // Fallback if name not in backend user
+                email: user.email,
+                role: user.role,
+                image: "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
+            };
 
-        // Cookies added
-        Cookies.set(TOKEN_NAME.HRM_FIRM, JSON.stringify(payload));
-        Cookies.set(TOKEN_NAME.USER_INFO, JSON.stringify(user));
+            // Dispatch to Redux
+            dispatch(login({
+                user: frontendUser,
+                token: accessToken
+            }));
 
-        // Toast added
-        toast.success(`${user.name} your account successful login`);
+            // Cookies added for persistence
+            Cookies.set(TOKEN_NAME.HRM_FIRM, accessToken);
+            Cookies.set(TOKEN_NAME.USER_INFO, JSON.stringify(frontendUser));
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
 
-        // Navigate
-        window.location.href = "/";
+            // Toast added
+            toast.success(`Welcome back, ${frontendUser.name}!`);
 
+            // Navigate to home
+            navigate("/");
+        } catch (error: any) {
+            toast.error(error.message || "Login failed. Please check your credentials.");
+        } finally {
+            setIsLoading(false);
+        }
     }
     const googleAuth = async () => {}
 
@@ -139,8 +160,8 @@ export default function SignInPage() {
                             </form>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
-                            <Button onClick={() => signIn()} type="submit" className="w-full rounded-full py-5 bg-linear-to-l from-[#0170DA] to-[#002282] cursor-pointer">
-                                Sign In
+                            <Button disabled={isLoading} onClick={() => signIn()} type="submit" className="w-full rounded-full py-5 bg-linear-to-l from-[#0170DA] to-[#002282] cursor-pointer">
+                                {isLoading ? "Signing In..." : "Sign In"}
                             </Button>
                             <div className="p-[1px] rounded-full w-full bg-gradient-to-r from-[#4A58F9] to-[#8BEAFE]">
                                 <Button onClick={() => googleAuth()} variant="outline" className="w-full rounded-full py-5 cursor-pointer">

@@ -1,6 +1,7 @@
 
 export const USER_ROLE_ENUM = {
-    USER: 'user',
-    ADMIN: 'admin',
-    SUB_ADMIN: 'subAdmin',
+    SUPER_ADMIN: 'SUPER_ADMIN',
+    SUB_ADMIN: 'SUB_ADMIN',
+    EMPLOYER: 'EMPLOYER',
+    EMPLOYEE: 'EMPLOYEE',
 } as const;

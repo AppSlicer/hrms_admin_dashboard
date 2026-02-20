@@ -27,7 +27,7 @@ export default function Sidebar() {
     }, [setSearchParams, dispatch]);
 
     useEffect(() => {
-        if (user?.role === USER_ROLE_ENUM.ADMIN) {
+        if (user?.role === USER_ROLE_ENUM.SUPER_ADMIN) {
             setTab(admin[0].title);
         } else if (user?.role === USER_ROLE_ENUM.SUB_ADMIN) {
             setTab(subAdmin[0].title);
@@ -36,7 +36,7 @@ export default function Sidebar() {
 
     // Memoized tab configuration based on user role
     const tabs = useMemo(() => {
-        if (user?.role === USER_ROLE_ENUM.ADMIN) {
+        if (user?.role === USER_ROLE_ENUM.SUPER_ADMIN) {
             return admin;
         } else if (user?.role === USER_ROLE_ENUM.SUB_ADMIN) {
             return subAdmin;
@@ -66,7 +66,7 @@ export default function Sidebar() {
     return (
         <div className="w-[400px] h-full flex justify-center items-center relative">
             <div className="w-[230px] md:w-[260px] xl:w-[300px] pt-4 h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end">
-                {user.role === USER_ROLE_ENUM.ADMIN || user.role === USER_ROLE_ENUM.SUB_ADMIN ? (
+                {user.role === USER_ROLE_ENUM.SUPER_ADMIN || user.role === USER_ROLE_ENUM.SUB_ADMIN ? (
                     tabs.map((item) => (
                         <TabItem
                             key={item.title}
