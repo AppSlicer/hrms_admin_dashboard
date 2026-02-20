@@ -3,35 +3,35 @@ import {lazy, Suspense} from "react";
 import Loader from "../components/ui/Loader.tsx";
 
 // Lazy Imports
-const SignIn = lazy( () => import("../pages/auth/SignIn.tsx"));
-const SignUpPage = lazy( () => import("../pages/auth/SignUp.tsx"));
-const ForgotPasswordPage = lazy( () => import("../pages/auth/ForgotPassword.tsx"));
-const VerifyEmailPage = lazy( () => import("../pages/auth/VerifyEmail.tsx"));
-const CreateNewPasswordPage = lazy( () => import("../pages/auth/CreateNewPassword.tsx"));
-const ResetPasswordPage = lazy( () => import("../pages/auth/ResetPasswordPage.tsx"));
-const NotFoundPage = lazy( () => import("../pages/not-found/NotFoundPage.tsx"));
-const ProtectedRoute = lazy( () => import("./ProtectedRoute.tsx"));
+const SignIn = lazy( () => import("../pages/auth/SignIn"));
+const SignUpPage = lazy( () => import("../pages/auth/SignUp"));
+const ForgotPasswordPage = lazy( () => import("../pages/auth/ForgotPassword"));
+const VerifyEmailPage = lazy( () => import("../pages/auth/VerifyEmail"));
+const CreateNewPasswordPage = lazy( () => import("../pages/auth/CreateNewPassword"));
+const ResetPasswordPage = lazy( () => import("../pages/auth/ResetPasswordPage"));
+const NotFoundPage = lazy( () => import("../pages/not-found/NotFoundPage"));
+const ProtectedRoute = lazy( () => import("./ProtectedRoute"));
 
 // Dashboard Pages
-const OverviewPage = lazy(() => import("../pages/dashboard/OverviewPage.tsx"));
-const SubAdminManagementPage = lazy(() => import("../pages/dashboard/SubAdminManagementPage.tsx"));
-const EmployerManagementPage = lazy(() => import("../pages/dashboard/EmployerManagementPage.tsx"));
-const ProfitsPage = lazy(() => import("../pages/dashboard/ProfitsPage.tsx"));
-const HrmcAuditReportPage = lazy(() => import("../pages/dashboard/HrmcAuditReportPage.tsx"));
-const AuditLogPage = lazy(() => import("../pages/dashboard/AuditLogPage.tsx"));
-const SubscriptionManagementPage = lazy(() => import("../pages/dashboard/SubscriptionManagementPage.tsx"));
-const TermsAndConditionPage = lazy(() => import("../pages/dashboard/TermsAndConditionPage.tsx"));
-const PrivacyPolicyPage = lazy(() => import("../pages/dashboard/PrivacyPolicyPage.tsx"));
-const SubscriberPage = lazy(() => import("../pages/dashboard/SubscriberPage.tsx"));
-const EmailMarketingPage = lazy(() => import("../pages/dashboard/EmailMarketingPage.tsx"));
-const ProfilePage = lazy(() => import("../pages/dashboard/ProfilePage.tsx"));
-const HelpAndSupportPage = lazy(() => import("../pages/dashboard/HelpAndSupportPage.tsx"));
-const MessagesPage = lazy(() => import("../pages/dashboard/MessagesPage.tsx"));
-const NotificationsPage = lazy(() => import("../pages/dashboard/NotificationsPage.tsx"));
-const AttendanceManagementPage = lazy(() => import("../pages/dashboard/AttendanceManagementPage.tsx"));
-const LeaveManagementPage = lazy(() => import("../pages/dashboard/LeaveManagementPage.tsx"));
-const TaskManagementPage = lazy(() => import("../pages/dashboard/TaskManagementPage.tsx"));
-const PaySlipPage = lazy(() => import("../pages/dashboard/PaySlipPage.tsx"));
+const OverviewPage = lazy(() => import("../pages/dashboard/OverviewPage"));
+const SubAdminManagementPage = lazy(() => import("../pages/dashboard/SubAdminManagementPage"));
+const EmployerManagementPage = lazy(() => import("../pages/dashboard/EmployerManagementPage"));
+const ProfitsPage = lazy(() => import("../pages/dashboard/ProfitsPage"));
+const HrmcAuditReportPage = lazy(() => import("../pages/dashboard/HrmcAuditReportPage"));
+const AuditLogPage = lazy(() => import("../pages/dashboard/AuditLogPage"));
+const SubscriptionManagementPage = lazy(() => import("../pages/dashboard/SubscriptionManagementPage"));
+const TermsAndConditionPage = lazy(() => import("../pages/dashboard/TermsAndConditionPage"));
+const PrivacyPolicyPage = lazy(() => import("../pages/dashboard/PrivacyPolicyPage"));
+const SubscriberPage = lazy(() => import("../pages/dashboard/SubscriberPage"));
+const EmailMarketingPage = lazy(() => import("../pages/dashboard/EmailMarketingPage"));
+const ProfilePage = lazy(() => import("../pages/dashboard/ProfilePage"));
+const HelpAndSupportPage = lazy(() => import("../pages/dashboard/HelpAndSupportPage"));
+const MessagesPage = lazy(() => import("../pages/dashboard/MessagesPage"));
+const NotificationsPage = lazy(() => import("../pages/dashboard/NotificationsPage"));
+const AttendanceManagementPage = lazy(() => import("../pages/dashboard/AttendanceManagementPage"));
+const LeaveManagementPage = lazy(() => import("../pages/dashboard/LeaveManagementPage"));
+const TaskManagementPage = lazy(() => import("../pages/dashboard/TaskManagementPage"));
+const PaySlipPage = lazy(() => import("../pages/dashboard/PaySlipPage"));
 
 export default function RouterElement () {
     return (
