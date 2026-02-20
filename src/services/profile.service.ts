@@ -17,7 +17,7 @@ export const profileService = {
     formData.append('file', file);
 
     const token = localStorage.getItem('accessToken');
-    const response = await fetch('http://localhost:8089/api/v1/profile/upload', {
+    const response = await fetch('http://164.68.121.216:8089/api/v1/profile/upload', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

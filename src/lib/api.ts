@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://localhost:8089/api/v1';
+const BASE_URL = 'http://164.68.121.216:8089/api/v1';
 
 export async function apiRequest<T>(
   endpoint: string,
