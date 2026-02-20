@@ -82,6 +82,12 @@ export default function HomePage () {
                 ) :
                 tab == subAdmin[5].title ? (
                     <PaySlip />
+                ) :
+                tab == subAdmin[9].title ? (
+                    <ProfileTabs />
+                ) :
+                tab == subAdmin[10].title ? (
+                    <HelpAndSupport />
                 ) : ( <NotAvailable /> )
             }
         </DashboardLayout>
