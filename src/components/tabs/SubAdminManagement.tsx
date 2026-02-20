@@ -100,14 +100,14 @@ export default function SubAdminManagement() {
     };
 
     return (
-        <div className={"w-full h-full p-6"}>
+        <div className={"w-full h-full p-6 bg-transparent"}>
             {/* Header section */}
             <div className={"flex justify-between items-center mb-6"}>
-                <h1 className={"text-3xl font-semibold"}>Sub Admin Management</h1>
+                <h1 className={"text-3xl font-semibold text-gray-900 dark:text-white"}>Sub Admin Management</h1>
                 <div className={"gap-2 flex z-20"}>
                     <Button 
                         onClick={() => setIsAdding(!isAdding)}
-                        className={"bg-[#125BAC] text-white rounded-full"}
+                        className={"bg-[#125BAC] dark:bg-blue-600 text-white rounded-full"}
                     >
                         {isAdding ? "Cancel" : "Add Sub Admin"}
                     </Button>
@@ -115,48 +115,52 @@ export default function SubAdminManagement() {
             </div>
 
             {isAdding && (
-                <div className="mb-8 p-6 border rounded-xl bg-gray-50">
-                    <h2 className="text-xl font-bold mb-4">Create New Sub Admin</h2>
+                <div className="mb-8 p-6 border rounded-xl bg-gray-50 dark:bg-card border-gray-200 dark:border-gray-800 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
+                    <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Create New Sub Admin</h2>
                     <form onSubmit={handleCreateSubAdmin} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label>Full Name</Label>
+                            <Label className="dark:text-gray-300">Full Name</Label>
                             <Input 
                                 required
                                 value={newSubAdmin.name}
                                 onChange={e => setNewSubAdmin({...newSubAdmin, name: e.target.value})}
                                 placeholder="Enter name"
+                                className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Email</Label>
+                            <Label className="dark:text-gray-300">Email</Label>
                             <Input 
                                 type="email"
                                 required
                                 value={newSubAdmin.email}
                                 onChange={e => setNewSubAdmin({...newSubAdmin, email: e.target.value})}
                                 placeholder="email@example.com"
+                                className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Password</Label>
+                            <Label className="dark:text-gray-300">Password</Label>
                             <Input 
                                 type="password"
                                 required
                                 value={newSubAdmin.password}
                                 onChange={e => setNewSubAdmin({...newSubAdmin, password: e.target.value})}
                                 placeholder="Min 6 characters"
+                                className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Phone Number</Label>
+                            <Label className="dark:text-gray-300">Phone Number</Label>
                             <Input 
                                 value={newSubAdmin.phoneNumber}
                                 onChange={e => setNewSubAdmin({...newSubAdmin, phoneNumber: e.target.value})}
                                 placeholder="Optional"
+                                className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
                             />
                         </div>
                         <div className="md:col-span-2 flex justify-end gap-2 mt-4">
-                            <Button type="submit" className="bg-[#125BAC] text-white rounded-full">
+                            <Button type="submit" className="bg-[#125BAC] dark:bg-blue-600 text-white rounded-full px-8">
                                 Create Sub Admin
                             </Button>
                         </div>
@@ -167,14 +171,14 @@ export default function SubAdminManagement() {
             {/* Table */}
             <Table totalPages={1} className={""}>
                 {/* Table Heading*/}
-                <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
-                    <TableRowCol className="flex-[0.5]"><h3>SL</h3></TableRowCol>
-                    <TableRowCol className="flex-[0.5]"><h3>Image</h3></TableRowCol>
-                    <TableRowCol><h3>Sub Admin</h3></TableRowCol>
-                    <TableRowCol className="flex-[1.5]"><h3>Email</h3></TableRowCol>
-                    <TableRowCol><h3>Created At</h3></TableRowCol>
-                    <TableRowCol><h3>Status</h3></TableRowCol>
-                    <TableRowCol><h3>Action</h3></TableRowCol>
+                <TableRow className={"bg-[#C7E2FF] dark:bg-blue-900/30 h-[60px] border-0 font-semibold"}>
+                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">SL</h3></TableRowCol>
+                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">Image</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Sub Admin</h3></TableRowCol>
+                    <TableRowCol className="flex-[1.5]"><h3 className="dark:text-white">Email</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Created At</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Status</h3></TableRowCol>
+                    <TableRowCol><h3 className="dark:text-white">Action</h3></TableRowCol>
                 </TableRow>
                 
                 {isLoading ? (
@@ -183,33 +187,33 @@ export default function SubAdminManagement() {
                     </TableRow>
                 ) : filteredSubAdmins.length === 0 ? (
                     <TableRow className="h-[100px] border rounded-none">
-                        <TableRowCol className="col-span-full text-center">No sub-admins found.</TableRowCol>
+                        <TableRowCol className="col-span-full text-center dark:text-gray-400">No sub-admins found.</TableRowCol>
                     </TableRow>
                 ) : (
                     filteredSubAdmins.map((admin, index) => (
-                        <TableRow key={admin.id} className={"h-[60px] border rounded-none"}>
+                        <TableRow key={admin.id} className={"h-[60px] border rounded-none hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"}>
                             <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol className="flex-[0.5]">
-                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200"}>
+                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200 dark:border-gray-700"}>
                                     <ImageWithSkeleton src={admin.profileImage || defaultImage} />
                                 </div>
                             </TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm truncate" title={admin.email}>{admin.email.split('@')[0]}</h3>
+                                <h3 className="text-sm truncate dark:text-gray-300" title={admin.email}>{admin.email.split('@')[0]}</h3>
                             </TableRowCol>
                             <TableRowCol className="flex-[1.5]">
                                 <Tooltip content={admin.email}>
-                                    <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(admin.email)}>{admin.email}</h3>
+                                    <h3 className="text-sm truncate cursor-pointer dark:text-gray-300" onClick={() => copyToClipboard(admin.email)}>{admin.email}</h3>
                                 </Tooltip>
                             </TableRowCol>
                             <TableRowCol>
-                                <h3 className="text-sm">{new Date(admin.createdAt).toLocaleDateString()}</h3>
+                                <h3 className="text-sm dark:text-gray-400">{new Date(admin.createdAt).toLocaleDateString()}</h3>
                             </TableRowCol>
                             <TableRowCol>
                                 <div className={"w-full h-full flex justify-center items-center"}>
                                     <Button 
                                         onClick={() => handleStatusToggle(admin.id, admin.status)}
-                                        className={`border font-normal ${
+                                        className={`border font-normal text-xs h-8 ${
                                             admin.status === 'ACTIVE' ? 'border-[#008F37] bg-[#E6F4EB] text-black' : 
                                             admin.status === 'SUSPENDED' ? 'border-orange-500 bg-orange-50 text-black' :
                                             'border-red-500 bg-red-50 text-black'
@@ -223,12 +227,12 @@ export default function SubAdminManagement() {
                                 <div className={"w-[70px] h-full flex justify-around items-center"}>
                                     <LockIcon 
                                         onClick={() => handleBlock(admin.id)}
-                                        className={`cursor-pointer ${admin.status === 'SUSPENDED' ? 'text-gray-400' : 'text-orange-500'} hover:scale-110 transition-transform`} 
+                                        className={`cursor-pointer ${admin.status === 'SUSPENDED' ? 'text-gray-400' : 'text-orange-500 dark:text-orange-400'} hover:scale-110 transition-transform`} 
                                         size={18}
                                     />
                                     <Trash2 
                                         onClick={() => handleDelete(admin.id)}
-                                        className={"cursor-pointer text-red-500 hover:scale-110 transition-transform"} 
+                                        className={"cursor-pointer text-red-500 dark:text-red-400 hover:scale-110 transition-transform"} 
                                         size={18}
                                     />
                                 </div>
