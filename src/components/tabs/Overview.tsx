@@ -13,9 +13,9 @@ export default function OverviewTab() {
     };
 
     return (
-        <div className="space-y-6 p-4">
+        <div className="space-y-6 p-4 md:p-6 lg:p-8">
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <StatCard title="Total Sub Admin" value={stats.totalSubAdmin} />
                 <StatCard title="Total Employer" value={stats.totalEmployer} />
                 <StatCard title="Total Employee" value={stats.totalEmployee} />
@@ -23,13 +23,13 @@ export default function OverviewTab() {
             </div>
 
             {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <RevenueChart />
                 <ProfitChart />
             </div>
 
             {/* Additional Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 <div className="bg-white h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border">
                     <div className={"flex items-center justify-between border-b text-xl font-semibold mb-2 pb-2"}>
                         <h4 className={""}>Total Company</h4>

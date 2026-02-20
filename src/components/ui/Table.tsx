@@ -18,14 +18,15 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
     };
 
     return (
-        <div
-            className={`min-w-[1400px] min-h-[75vh] mt-5 border rounded-sm overflow-hidden relative ${className}`}
-        >
-            {/* Table content */}
-            <div className={"w-full h-full"}>{children}</div>
+        <div className="w-full flex flex-col mt-5 border rounded-sm overflow-hidden bg-white">
+            <div className="overflow-x-auto">
+                <div className={`min-w-[1000px] ${className}`}>
+                    {children}
+                </div>
+            </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between px-4 py-3 border-t bg-gray-50 absolute bottom-0 w-full">
+            <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t bg-gray-50">
                 <button
                     onClick={handlePrev}
                     disabled={currentPage === 1}
@@ -38,9 +39,10 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
                     Previous
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2">
                     {[...Array(totalPages)].map((_, index) => {
                         const page = index + 1;
+                        if (totalPages > 7 && Math.abs(currentPage - page) > 2 && page !== 1 && page !== totalPages) return null;
                         return (
                             <button
                                 key={page}
@@ -55,6 +57,10 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
                             </button>
                         );
                     })}
+                </div>
+
+                <div className="sm:hidden text-sm font-medium">
+                    Page {currentPage} of {totalPages}
                 </div>
 
                 <button

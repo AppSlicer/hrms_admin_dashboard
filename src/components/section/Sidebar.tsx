@@ -64,8 +64,8 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="w-[400px] h-full flex justify-center items-center relative">
-            <div className="w-[230px] md:w-[260px] xl:w-[300px] pt-4 h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end">
+        <div className="w-[260px] md:w-[300px] lg:w-[350px] h-full flex justify-center items-center relative shrink-0">
+            <div className="w-[240px] md:w-[280px] lg:w-[320px] pt-4 h-[95%] bg-[#125BAC] text-white rounded-3xl relative flex flex-col items-end shadow-xl">
                 {user.role === USER_ROLE_ENUM.SUPER_ADMIN || user.role === USER_ROLE_ENUM.SUB_ADMIN ? (
                     tabs.map((item) => (
                         <TabItem
@@ -86,7 +86,7 @@ export default function Sidebar() {
             {/* Logout button */}
             <button
                 onClick={logOut}
-                className="absolute cursor-pointer bottom-9 left-9 text-white flex gap-2 items-center hover:text-blue-200 duration-200"
+                className="absolute cursor-pointer bottom-9 left-12 text-white flex gap-2 items-center hover:text-blue-200 duration-200 z-30"
             >
                 <LogOut size={18} />
                 <span className="font-medium">Logout</span>

@@ -4,247 +4,136 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuTrigger
-} from "@radix-ui/react-dropdown-menu";
-import {useState} from "react";
+} from "@/components/ui/dropdown-menu.tsx";
+import {useEffect, useState} from "react";
 import TableRow from "@/components/ui/TableRow.tsx";
 import Table from "@/components/ui/Table.tsx";
 import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
 import ImageStatic from "/auth/google.png";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {EyeOff, LockIcon} from "lucide-react";
+import {EyeOff, LockIcon, Trash2} from "lucide-react";
+import {userService} from "@/services/user.service.ts";
+import {toast} from "sonner";
 
 export default function UserManagement() {
+    const [data, setData] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [userType, setUserType] = useState<"EMPLOYER" | "EMPLOYEE">("EMPLOYER");
 
-    const [status, setStatus] = useState<string>();
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            // For now, listing employers as sub-admins primarily manage employers
+            const result = await userService.getEmployers();
+            setData(result);
+        } catch (error: any) {
+            toast.error(error.message || "Failed to fetch data");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    console.log("Console from the status -:- ",status);
+    useEffect(() => {
+        fetchData();
+    }, [userType]);
+
+    const handleBlock = async (id: string) => {
+        if (!confirm("Are you sure you want to block this user?")) return;
+        try {
+            await userService.blockUser(id);
+            toast.success("User blocked successfully");
+            fetchData();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to block user");
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("Are you sure you want to delete this user?")) return;
+        try {
+            await userService.deleteSubAdmin(id);
+            toast.success("User deleted successfully");
+            fetchData();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to delete user");
+        }
+    };
 
     return (
         <div className={"w-full h-full p-6"}>
             {/* Header section */}
-            <div className={"flex justify-between items-center"}>
+            <div className={"flex justify-between items-center mb-6"}>
                 <h1 className={"text-3xl font-semibold"}>User Management</h1>
                 <div className={"gap-2 flex z-20"}>
-                    <Button className={"bg-[#125BAC] text-white rounded-full cursor-pointer"}>Add Employer</Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className={"cursor-pointer"}>All User</Button>
+                            <Button variant="outline" className={"cursor-pointer"}>
+                                {userType === "EMPLOYER" ? "Employers" : "Employees"}
+                            </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56 border bg-white rounded-xl p-4 mr-8 mt-4" align="start">
                             <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Users type</DropdownMenuLabel>
-                            <DropdownMenuGroup className={""}>
-                                <DropdownMenuItem onClick={() => setStatus("active")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setStatus("in-active")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem onClick={() => setUserType("EMPLOYER")} className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setUserType("EMPLOYEE")} className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
             </div>
             {/* Table */}
-            <Table totalPages={10} className={""}>
-                {/* Table Heading*/}
-                <TableRow
-                    className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}
-                >
-                    <TableRowCol>
-                        <h3>SL</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Image</h3>
-                    </TableRowCol>
-                    <TableRowCol >
-                        <h3>Sub Admin</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Sub Admin ID</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Email</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Contact Number</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Total Employer</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Subscription</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Status</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Action</h3>
-                    </TableRowCol>
+            <Table totalPages={1} className={""}>
+                <TableRow className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}>
+                    <TableRowCol><h3>SL</h3></TableRowCol>
+                    <TableRowCol><h3>Name</h3></TableRowCol>
+                    <TableRowCol><h3>Email</h3></TableRowCol>
+                    <TableRowCol><h3>Company</h3></TableRowCol>
+                    <TableRowCol><h3>Joined At</h3></TableRowCol>
+                    <TableRowCol><h3>Status</h3></TableRowCol>
+                    <TableRowCol><h3>Action</h3></TableRowCol>
                 </TableRow>
-                {/* Table body or content */}
-                <TableRow
-                    className={"h-[60px] border rounded-none"}
-                >
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("1")}
-                        >
-                            1
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[30px] h-[30px] rounded-full overflow-hidden"}>
-                            <ImageWithSkeleton src={ImageStatic} />
-                        </div>
-                    </TableRowCol>
-                    <TableRowCol >
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("MD Sohidul Islam Ananto")}
-                        >
-                            MD Sohidul Islam Ananto
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("234234k234239ksdasdfasdfsadh")}
-                        >
-                            234234k234239ksdasdfasdfsadh
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("anontom90@gmail.com")}
-                        >
-                            anontom90@gmail.com
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("01383938337")}
-                        >
-                            018009393842
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("2113")}
-                        >
-                            1239
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("stander")}
-                        >
-                            stander
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-full h-full flex justify-center items-center"}>
-                            <Button className={"border border-[#008F37] bg-[#E6F4EB] text-black font-normal"}>Active</Button>
-                        </div>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[70px] h-full flex justify-around items-center"}>
-                            <LockIcon className={"cursor-pointer text-red-500"} />
-                            <EyeOff className={"cursor-pointer text-green-500"} />
-                        </div>
-                    </TableRowCol>
-                </TableRow>
-                <TableRow
-                    className={"h-[60px] border rounded-none"}
-                >
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("1")}
-                        >
-                            2
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[30px] h-[30px] rounded-full overflow-hidden"}>
-                            <ImageWithSkeleton src={ImageStatic} />
-                        </div>
-                    </TableRowCol>
-                    <TableRowCol >
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("MD Sohidul Islam Ananto")}
-                        >
-                            Sajiduj jaman
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("234234k234239ksdasdfasdfsadh")}
-                        >
-                            234kasdhfkjahsdkf
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("anontom90@gmail.com")}
-                        >
-                            asdfasdf@gmail.com
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("01383938337")}
-                        >
-                            0998287267
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("2113")}
-                        >
-                            123
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("stander")}
-                        >
-                            premium
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-full h-full flex justify-center items-center"}>
-                            <Button className={"border border-[#FF5900] bg-[#FEEEEE] text-black font-normal"}>In-Active</Button>
-                        </div>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[70px] h-full flex justify-around items-center"}>
-                            <LockIcon className={"cursor-pointer text-red-500"} />
-                            <EyeOff className={"cursor-pointer text-green-500"} />
-                        </div>
-                    </TableRowCol>
-                </TableRow>
+
+                {isLoading ? (
+                    <TableRow className="h-[100px] border rounded-none">
+                        <TableRowCol className="col-span-full text-center">Loading...</TableRowCol>
+                    </TableRow>
+                ) : data.length === 0 ? (
+                    <TableRow className="h-[100px] border rounded-none">
+                        <TableRowCol className="col-span-full text-center">No users found.</TableRowCol>
+                    </TableRow>
+                ) : (
+                    data.map((user, index) => (
+                        <TableRow key={user.id} className={"h-[60px] border rounded-none"}>
+                            <TableRowCol><h3>{index + 1}</h3></TableRowCol>
+                            <TableRowCol>
+                                <h3 className="text-sm font-medium">{user.employer?.companyName || user.email.split('@')[0]}</h3>
+                            </TableRowCol>
+                            <TableRowCol>
+                                <h3 className="text-sm truncate cursor-pointer" onClick={() => copyToClipboard(user.email)}>{user.email}</h3>
+                            </TableRowCol>
+                            <TableRowCol>
+                                <h3 className="text-sm">{user.employer?.companyName || "N/A"}</h3>
+                            </TableRowCol>
+                            <TableRowCol>
+                                <h3 className="text-sm">{new Date(user.createdAt).toLocaleDateString()}</h3>
+                            </TableRowCol>
+                            <TableRowCol>
+                                <div className={"w-full h-full flex justify-center items-center"}>
+                                    <Button className={`border font-normal ${user.status === 'ACTIVE' ? 'border-[#008F37] bg-[#E6F4EB] text-black' : 'border-red-500 bg-red-50 text-black'}`}>
+                                        {user.status}
+                                    </Button>
+                                </div>
+                            </TableRowCol>
+                            <TableRowCol>
+                                <div className={"w-[70px] h-full flex justify-around items-center"}>
+                                    <LockIcon onClick={() => handleBlock(user.id)} className={`cursor-pointer ${user.status === 'SUSPENDED' ? 'text-gray-400' : 'text-red-500'}`} size={18} />
+                                    <Trash2 onClick={() => handleDelete(user.id)} className={"cursor-pointer text-red-500"} size={18} />
+                                </div>
+                            </TableRowCol>
+                        </TableRow>
+                    ))
+                )}
             </Table>
         </div>
     )

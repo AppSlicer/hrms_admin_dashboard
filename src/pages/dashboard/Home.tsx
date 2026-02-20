@@ -69,7 +69,7 @@ export default function HomePage () {
                     <HelpAndSupport />
                 ) :
                 tab == subAdmin[1].title ? (
-                    <UserManagement />
+                    <EmployeeManagement />
                 ) :
                 tab == subAdmin[2].title ? (
                     <AttendanceManagement />
