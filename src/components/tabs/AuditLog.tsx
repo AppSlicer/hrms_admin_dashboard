@@ -5,7 +5,6 @@ import {
     DropdownMenuGroup, DropdownMenuItem,
     DropdownMenuLabel, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
-import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 
 export default function AuditLog() {

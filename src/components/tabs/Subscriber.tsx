@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
 import ImageStatic from "/auth/google.png";
-import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {EyeOff, LockIcon} from "lucide-react";
 import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
 

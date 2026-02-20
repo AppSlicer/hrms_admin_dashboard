@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store";
 import { USER_ROLE_ENUM } from "@/enum/role.enum";
-import { Loader2, Plus, X, Reply, Send } from "lucide-react";
+import { Loader2, Plus, X, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Tooltip from "@/components/ui/Tooltip";
