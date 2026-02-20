@@ -93,8 +93,8 @@ export default function Sidebar() {
     if (!user) return null;
 
     return (
-        <div className="w-[260px] md:w-[280px] lg:w-[300px] h-full flex flex-col items-center py-4 shrink-0 bg-gray-50/50 border-r border-gray-200">
-            <div className="w-[90%] h-full bg-[#125BAC] shadow-2xl shadow-blue-900/20 rounded-[2rem] relative flex flex-col items-center pt-6 pb-4 overflow-hidden">
+        <div className="w-[260px] md:w-[280px] lg:w-[300px] h-full flex flex-col items-center py-4 shrink-0 bg-gray-50/50 dark:bg-gray-900/50 border-r border-gray-200 dark:border-gray-800">
+            <div className="w-[90%] h-full bg-[#125BAC] dark:bg-blue-900 shadow-2xl shadow-blue-900/20 dark:shadow-black/40 rounded-[2rem] relative flex flex-col items-center pt-6 pb-4 overflow-hidden">
                 <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
                 
                 <div className="w-full flex flex-col items-center gap-1 overflow-y-auto custom-scrollbar px-2 flex-1 scroll-smooth">

@@ -8,6 +8,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { io } from "socket.io-client";
 
 function EmailMarketing() {
     const [view, setView] = useState<'list' | 'create'>('list');
@@ -63,13 +64,40 @@ function EmailMarketing() {
     useEffect(() => {
         fetchDashboardData();
         fetchUsers();
+
+        // WebSocket Integration
+        const socket = io("http://localhost:8080");
+
+        socket.on("connect", () => {
+            console.log("Connected to Real-time Marketing Updates");
+        });
+
+        socket.on("campaign-progress", (data) => {
+            const { campaignId, sent, status } = data;
+            
+            // Update the specific campaign in the list
+            setCampaigns(prev => prev.map(c => 
+                c.id === campaignId 
+                    ? { ...c, recipients: sent, status } 
+                    : c
+            ));
+
+            // Refresh general queue stats
+            marketingService.getQueueStats().then(setQueueStats);
+        });
+
+        // Poll queue stats every 10 seconds as backup
         const interval = setInterval(async () => {
             try {
                 const stats = await marketingService.getQueueStats();
                 setQueueStats(stats);
             } catch (e) { /* ignore */ }
         }, 10000);
-        return () => clearInterval(interval);
+
+        return () => {
+            clearInterval(interval);
+            socket.disconnect();
+        };
     }, []);
 
     const toggleUserSelection = (id: string) => {
@@ -249,7 +277,24 @@ function EmailMarketing() {
                                                 <div className="font-bold text-gray-900">{c.name}</div>
                                                 <div className="text-xs text-gray-400">{c.subject}</div>
                                             </td>
-                                            <td className="px-8 py-5 text-sm font-bold text-gray-600">{c.recipients}</td>
+                                            <td className="px-8 py-5">
+                                                <div className="flex flex-col gap-1.5 min-w-[120px]">
+                                                    <div className="flex justify-between text-[10px] font-bold text-gray-500">
+                                                        <span>{c.recipients} Sent</span>
+                                                        {c.status === 'active' && <span>Processing...</span>}
+                                                    </div>
+                                                    {c.status === 'active' ? (
+                                                        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                            <div 
+                                                                className="h-full bg-[#125BAC] transition-all duration-500 animate-pulse" 
+                                                                style={{ width: `${Math.min(100, (c.recipients / (c.totalRecipients || 1)) * 100)}%` }}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-xs font-bold text-gray-600">{c.recipients} Total</div>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td className="px-8 py-5">
                                                 <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${
                                                     c.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'

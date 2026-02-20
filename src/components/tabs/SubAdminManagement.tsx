@@ -11,10 +11,20 @@ import {toast} from "sonner";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import Tooltip from "@/components/ui/Tooltip";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store";
 
 export default function SubAdminManagement() {
+    const searchQuery = useSelector((state: RootState) => state.search.query);
     const [subAdmins, setSubAdmins] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    
+    // Filtered data based on global search
+    const filteredSubAdmins = subAdmins.filter(admin => 
+        admin.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (admin.name && admin.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
     const [isAdding, setIsAdding] = useState(false);
     
     // Form state
@@ -171,12 +181,12 @@ export default function SubAdminManagement() {
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center">Loading...</TableRowCol>
                     </TableRow>
-                ) : subAdmins.length === 0 ? (
+                ) : filteredSubAdmins.length === 0 ? (
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center">No sub-admins found.</TableRowCol>
                     </TableRow>
                 ) : (
-                    subAdmins.map((admin, index) => (
+                    filteredSubAdmins.map((admin, index) => (
                         <TableRow key={admin.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol className="flex-[0.5]">

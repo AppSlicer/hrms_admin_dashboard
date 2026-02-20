@@ -18,7 +18,7 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
     };
 
     return (
-        <div className="w-full flex flex-col mt-5 border rounded-sm overflow-hidden bg-white">
+        <div className="w-full flex flex-col mt-5 border border-gray-200 dark:border-gray-800 rounded-sm overflow-hidden bg-white dark:bg-card">
             <div className="overflow-x-auto">
                 <div className={`min-w-[1000px] ${className}`}>
                     {children}
@@ -26,14 +26,14 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
             </div>
 
             {/* Pagination */}
-            <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t bg-gray-50">
+            <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
                 <button
                     onClick={handlePrev}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded-md border ${
+                    className={`px-3 py-1 text-sm rounded-md border dark:text-gray-300 ${
                         currentPage === 1
                             ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-blue-100 border-blue-400"
+                            : "hover:bg-blue-100 dark:hover:bg-blue-900/20 border-blue-400"
                     }`}
                 >
                     Previous
@@ -50,7 +50,7 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
                                 className={`w-8 h-8 rounded-md text-sm font-medium border ${
                                     currentPage === page
                                         ? "bg-gradient-to-l from-[#003B8D] to-[#0062EB] text-white"
-                                        : "hover:bg-blue-100 border-blue-400"
+                                        : "hover:bg-blue-100 dark:hover:bg-blue-900/20 border-blue-400 dark:text-gray-300"
                                 }`}
                             >
                                 {page}
@@ -59,17 +59,17 @@ export default function Table({ children, className, totalPages = 5 }: Props) {
                     })}
                 </div>
 
-                <div className="sm:hidden text-sm font-medium">
+                <div className="sm:hidden text-sm font-medium dark:text-gray-300">
                     Page {currentPage} of {totalPages}
                 </div>
 
                 <button
                     onClick={handleNext}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded-md border ${
+                    className={`px-3 py-1 text-sm rounded-md border dark:text-gray-300 ${
                         currentPage === totalPages
                             ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-blue-100 border-blue-400"
+                            : "hover:bg-blue-100 dark:hover:bg-blue-900/20 border-blue-400"
                     }`}
                 >
                     Next

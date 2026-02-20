@@ -22,4 +22,11 @@ export const supportService = {
       body: JSON.stringify({ status }),
     });
   },
+
+  replyToTicket: async (id: string, reply: string) => {
+    return apiRequest<any>(`/support/tickets/${id}/reply`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reply }),
+    });
+  },
 };

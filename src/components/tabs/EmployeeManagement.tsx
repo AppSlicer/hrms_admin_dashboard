@@ -11,10 +11,20 @@ import {toast} from "sonner";
 import {Input} from "@/components/ui/input.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import Tooltip from "@/components/ui/Tooltip";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store";
 
 export default function EmployeeManagement() {
+    const searchQuery = useSelector((state: RootState) => state.search.query);
     const [employers, setEmployers] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    // Filtered data based on global search
+    const filteredEmployers = employers.filter(emp => 
+        emp.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (emp.employer?.companyName && emp.employer.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
     const [isAdding, setIsAdding] = useState(false);
     
     // Form state
@@ -172,12 +182,12 @@ export default function EmployeeManagement() {
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center">Loading...</TableRowCol>
                     </TableRow>
-                ) : employers.length === 0 ? (
+                ) : filteredEmployers.length === 0 ? (
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center">No employers found.</TableRowCol>
                     </TableRow>
                 ) : (
-                    employers.map((emp, index) => (
+                    filteredEmployers.map((emp, index) => (
                         <TableRow key={emp.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol className="flex-[0.5]">

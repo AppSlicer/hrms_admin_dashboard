@@ -15,10 +15,20 @@ import {LockIcon, Trash2} from "lucide-react";
 import {userService} from "@/services/user.service.ts";
 import {toast} from "sonner";
 import Tooltip from "@/components/ui/Tooltip";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store";
 
 export default function UserManagement() {
+    const searchQuery = useSelector((state: RootState) => state.search.query);
     const [data, setData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    // Filtered data based on global search
+    const filteredData = data.filter(user => 
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (user.employer?.companyName && user.employer.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
     const [userType, setUserType] = useState<"EMPLOYER" | "EMPLOYEE">("EMPLOYER");
 
     const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
@@ -101,12 +111,12 @@ export default function UserManagement() {
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center">Loading...</TableRowCol>
                     </TableRow>
-                ) : data.length === 0 ? (
+                ) : filteredData.length === 0 ? (
                     <TableRow className="h-[100px] border rounded-none">
                         <TableRowCol className="col-span-full text-center text-gray-500">No users found.</TableRowCol>
                     </TableRow>
                 ) : (
-                    data.map((user, index) => (
+                    filteredData.map((user, index) => (
                         <TableRow key={user.id} className={"h-[60px] border rounded-none"}>
                             <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
                             <TableRowCol className="flex-[0.5]">
