@@ -6,10 +6,11 @@ export async function apiRequest<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = localStorage.getItem('accessToken');
+  const isPublic = endpoint.startsWith('/system/') && options.method === 'GET' || endpoint.startsWith('/auth/');
   
-  const headers = {
+  const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...((token && !isPublic) ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };
 
