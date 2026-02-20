@@ -6,9 +6,6 @@ import {
     DropdownMenuLabel, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
 import {useEffect, useState} from "react";
-import TableRow from "@/components/ui/TableRow.tsx";
-import Table from "@/components/ui/Table.tsx";
-import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
 import {copyToClipboard} from "@/lib/copyClipboard.ts";
 import {LockIcon, Trash2} from "lucide-react";
@@ -17,26 +14,83 @@ import {toast} from "sonner";
 import Tooltip from "@/components/ui/Tooltip";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store";
+import ReusableTable, { Column } from "@/components/ui/ReusableTable";
 
 export default function UserManagement() {
     const searchQuery = useSelector((state: RootState) => state.search.query);
     const [data, setData] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [userType, setUserType] = useState<"EMPLOYER" | "EMPLOYEE">("EMPLOYER");
 
-    // Filtered data based on global search
+    const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
+
     const filteredData = data.filter(user => 
         user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (user.employer?.companyName && user.employer.companyName.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    const [userType, setUserType] = useState<"EMPLOYER" | "EMPLOYEE">("EMPLOYER");
-
-    const defaultImage = "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=";
+    const columns: Column<any>[] = [
+        { header: "SL", flex: 0.5, render: (_, index) => <span className="text-sm font-bold">{index + 1}</span> },
+        { 
+            header: "Image", 
+            flex: 0.5, 
+            render: (item) => (
+                <div className="w-9 h-9 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <ImageWithSkeleton src={item.profileImage || item.employer?.profileImage || defaultImage} />
+                </div>
+            ) 
+        },
+        { 
+            header: "Name", 
+            flex: 1.2, 
+            render: (item) => (
+                <span className="text-sm font-bold dark:text-gray-200 truncate px-2 block">
+                    {item.employer?.companyName || item.name || item.email.split('@')[0]}
+                </span>
+            )
+        },
+        { 
+            header: "Email", 
+            flex: 1.5, 
+            render: (item) => (
+                <Tooltip content={item.email}>
+                    <span className="text-sm font-medium truncate cursor-pointer dark:text-gray-300 block px-2" onClick={() => copyToClipboard(item.email)}>{item.email}</span>
+                </Tooltip>
+            )
+        },
+        { 
+            header: userType === "EMPLOYER" ? "Company" : "Role", 
+            render: (item) => <span className="text-xs dark:text-gray-400">{userType === "EMPLOYER" ? (item.employer?.companyName || "N/A") : item.role}</span> 
+        },
+        { 
+            header: "Joined At", 
+            render: (item) => <span className="text-xs dark:text-gray-400">{new Date(item.createdAt).toLocaleDateString()}</span> 
+        },
+        { 
+            header: "Status", 
+            render: (item) => (
+                <div className={`px-3 py-1 rounded-full text-[10px] font-bold inline-block ${
+                    item.status === 'ACTIVE' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
+                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                }`}>
+                    {item.status}
+                </div>
+            )
+        },
+        { 
+            header: "Action", 
+            render: (item) => (
+                <div className="flex gap-4">
+                    <LockIcon onClick={() => handleBlock(item.id)} className={`cursor-pointer ${item.status === 'SUSPENDED' ? 'text-gray-400' : 'text-orange-500 dark:text-orange-400'} hover:scale-110 transition-transform`} size={18} />
+                    <Trash2 onClick={() => handleDelete(item.id)} className="cursor-pointer text-red-500 dark:text-red-400 hover:scale-110 transition-transform" size={18} />
+                </div>
+            )
+        }
+    ];
 
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            // For now, listing employers as sub-admins primarily manage employers
             const result = await userService.getEmployers();
             setData(result);
         } catch (error: any) {
@@ -51,10 +105,10 @@ export default function UserManagement() {
     }, [userType]);
 
     const handleBlock = async (id: string) => {
-        if (!confirm("Are you sure you want to block this user?")) return;
+        if (!confirm("Block this user?")) return;
         try {
             await userService.blockUser(id);
-            toast.success("User blocked successfully");
+            toast.success("User blocked");
             fetchData();
         } catch (error: any) {
             toast.error(error.message || "Failed to block user");
@@ -62,10 +116,10 @@ export default function UserManagement() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this user?")) return;
+        if (!confirm("Delete this user?")) return;
         try {
             await userService.deleteSubAdmin(id);
-            toast.success("User deleted successfully");
+            toast.success("User deleted");
             fetchData();
         } catch (error: any) {
             toast.error(error.message || "Failed to delete user");
@@ -74,7 +128,6 @@ export default function UserManagement() {
 
     return (
         <div className={"w-full h-full p-6 bg-transparent"}>
-            {/* Header section */}
             <div className={"flex justify-between items-center mb-6"}>
                 <h1 className={"text-3xl font-semibold text-gray-900 dark:text-white"}>User Management</h1>
                 <div className={"gap-2 flex z-20"}>
@@ -94,69 +147,13 @@ export default function UserManagement() {
                     </DropdownMenu>
                 </div>
             </div>
-            {/* Table */}
-            <Table totalPages={1} className={""}>
-                <TableRow className={"bg-[#C7E2FF] dark:bg-blue-900/30 h-[60px] border-b border-gray-200 dark:border-gray-800 font-semibold"}>
-                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">SL</h3></TableRowCol>
-                    <TableRowCol className="flex-[0.5]"><h3 className="dark:text-white">Image</h3></TableRowCol>
-                    <TableRowCol className="flex-[1.2]"><h3 className="dark:text-white">Name</h3></TableRowCol>
-                    <TableRowCol className="flex-[1.5]"><h3 className="dark:text-white">Email</h3></TableRowCol>
-                    <TableRowCol><h3 className="dark:text-white">Company</h3></TableRowCol>
-                    <TableRowCol><h3 className="dark:text-white">Joined At</h3></TableRowCol>
-                    <TableRowCol><h3 className="dark:text-white">Status</h3></TableRowCol>
-                    <TableRowCol><h3 className="dark:text-white">Action</h3></TableRowCol>
-                </TableRow>
 
-                {isLoading ? (
-                    <TableRow className="h-[100px] border rounded-none">
-                        <TableRowCol className="col-span-full text-center">Loading...</TableRowCol>
-                    </TableRow>
-                ) : filteredData.length === 0 ? (
-                    <TableRow className="h-[100px] border rounded-none">
-                        <TableRowCol className="col-span-full text-center text-gray-500 dark:text-gray-400">No users found.</TableRowCol>
-                    </TableRow>
-                ) : (
-                    filteredData.map((user, index) => (
-                        <TableRow key={user.id} className={"h-[60px] border rounded-none hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"}>
-                            <TableRowCol className="flex-[0.5]"><h3>{index + 1}</h3></TableRowCol>
-                            <TableRowCol className="flex-[0.5]">
-                                <div className={"w-[35px] h-[35px] rounded-full overflow-hidden border border-gray-200 dark:border-gray-700"}>
-                                    <ImageWithSkeleton src={user.profileImage || user.employer?.profileImage || defaultImage} />
-                                </div>
-                            </TableRowCol>
-                            <TableRowCol className="flex-[1.2]">
-                                <Tooltip content={user.employer?.companyName || user.email.split('@')[0]}>
-                                    <h3 className="text-sm font-medium truncate dark:text-gray-300">{user.employer?.companyName || user.email.split('@')[0]}</h3>
-                                </Tooltip>
-                            </TableRowCol>
-                            <TableRowCol className="flex-[1.5]">
-                                <Tooltip content={user.email}>
-                                    <h3 className="text-sm truncate cursor-pointer dark:text-gray-300" onClick={() => copyToClipboard(user.email)}>{user.email}</h3>
-                                </Tooltip>
-                            </TableRowCol>
-                            <TableRowCol>
-                                <h3 className="text-sm dark:text-gray-400">{user.employer?.companyName || "N/A"}</h3>
-                            </TableRowCol>
-                            <TableRowCol>
-                                <h3 className="text-sm dark:text-gray-400">{new Date(user.createdAt).toLocaleDateString()}</h3>
-                            </TableRowCol>
-                            <TableRowCol>
-                                <div className={"w-full h-full flex justify-center items-center"}>
-                                    <Button className={`border font-normal text-xs h-8 ${user.status === 'ACTIVE' ? 'border-[#008F37] bg-[#E6F4EB] text-black' : 'border-red-500 bg-red-50 text-black'}`}>
-                                        {user.status}
-                                    </Button>
-                                </div>
-                            </TableRowCol>
-                            <TableRowCol>
-                                <div className={"w-[70px] h-full flex justify-around items-center"}>
-                                    <LockIcon onClick={() => handleBlock(user.id)} className={`cursor-pointer ${user.status === 'SUSPENDED' ? 'text-gray-400' : 'text-orange-500 dark:text-orange-400'} hover:scale-110 transition-transform`} size={18} />
-                                    <Trash2 onClick={() => handleDelete(user.id)} className={"cursor-pointer text-red-500 dark:text-red-400 hover:scale-110 transition-transform"} size={18} />
-                                </div>
-                            </TableRowCol>
-                        </TableRow>
-                    ))
-                )}
-            </Table>
+            <ReusableTable 
+                columns={columns} 
+                data={filteredData} 
+                isLoading={isLoading} 
+                emptyMessage="No users found."
+            />
         </div>
     )
 }

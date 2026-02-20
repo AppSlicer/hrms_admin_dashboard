@@ -75,18 +75,15 @@ function EmailMarketing() {
         socket.on("campaign-progress", (data) => {
             const { campaignId, sent, status } = data;
             
-            // Update the specific campaign in the list
             setCampaigns(prev => prev.map(c => 
                 c.id === campaignId 
                     ? { ...c, recipients: sent, status } 
                     : c
             ));
 
-            // Refresh general queue stats
             marketingService.getQueueStats().then(setQueueStats);
         });
 
-        // Poll queue stats every 10 seconds as backup
         const interval = setInterval(async () => {
             try {
                 const stats = await marketingService.getQueueStats();
@@ -134,7 +131,7 @@ function EmailMarketing() {
                     ...campaignData,
                     targetRoles: selectedRoles,
                     targetUserIds: selectedUserIds,
-                    status: 'draft' // Reset to draft if edited
+                    status: 'draft'
                 });
             } else {
                 result = await marketingService.createCampaign({
@@ -145,8 +142,6 @@ function EmailMarketing() {
             }
             
             const campaignId = editingId || (result.data ? result.data.id : result.id);
-            if (!campaignId) throw new Error("Could not determine campaign ID");
-
             await marketingService.startCampaign(campaignId);
             toast.success("Campaign started successfully!");
             resetForm();
@@ -213,7 +208,7 @@ function EmailMarketing() {
     };
 
     if (isLoading && view === 'list') return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-transparent">
             <Loader2 className="w-10 h-10 text-[#125BAC] animate-spin mb-4" />
             <p className="text-blue-600 font-semibold">Loading dashboard...</p>
         </div>
@@ -359,17 +354,8 @@ function EmailMarketing() {
                                 <div className="space-y-2 flex-1 flex flex-col min-h-[400px]">
                                     <Label className="font-bold text-gray-700 dark:text-gray-300">Message Content</Label>
                                     <div className="flex-1 flex flex-col rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-                                        <ReactQuill theme="snow" value={campaignData.content} onChange={val => setCampaignData({...campaignData, content: val})} modules={modules} className="flex-1 flex flex-col dark:text-white" />
+                                        <ReactQuill theme="snow" value={campaignData.content} onChange={val => setCampaignData({...campaignData, content: val})} modules={modules} className="flex-1 flex flex-col" />
                                     </div>
-                                    <style>{`
-                                        .ql-container.ql-snow { border: none !important; flex: 1; display: flex; flex-direction: column; } 
-                                        .ql-editor { flex: 1; min-height: 300px; } 
-                                        .ql-toolbar.ql-snow { border: none !important; border-bottom: 1px solid #e5e7eb !important; background: #f9fafb; }
-                                        .dark .ql-toolbar.ql-snow { border-bottom: 1px solid #1f2937 !important; background: #111827; }
-                                        .dark .ql-snow .ql-stroke { stroke: #d1d5db; }
-                                        .dark .ql-snow .ql-fill { fill: #d1d5db; }
-                                        .dark .ql-snow .ql-picker { color: #d1d5db; }
-                                    `}</style>
                                 </div>
                             </div>
                         ) : (

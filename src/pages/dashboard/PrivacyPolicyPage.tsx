@@ -1,10 +1,10 @@
 import DashboardLayout from "@/layout/DashboardLayout";
-import PrivacyPolicyComponent from "@/components/tabs/PrivacyPolicy";
+import SystemPolicyPage from "@/components/tabs/SystemPolicyPage";
 
 export default function PrivacyPolicyPage() {
     return (
         <DashboardLayout>
-            <PrivacyPolicyComponent />
+            <SystemPolicyPage type="privacy" />
         </DashboardLayout>
     );
 }

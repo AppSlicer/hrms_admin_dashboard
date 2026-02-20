@@ -1,10 +1,10 @@
 import DashboardLayout from "@/layout/DashboardLayout";
-import TermsAndConditionComponent from "@/components/tabs/TermsAndCondition";
+import SystemPolicyPage from "@/components/tabs/SystemPolicyPage";
 
 export default function TermsAndConditionPage() {
     return (
         <DashboardLayout>
-            <TermsAndConditionComponent />
+            <SystemPolicyPage type="terms" />
         </DashboardLayout>
     );
 }
