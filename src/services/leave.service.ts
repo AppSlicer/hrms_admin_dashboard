@@ -84,5 +84,28 @@ export const leaveService = {
       method: 'POST',
       body: JSON.stringify(data),
     });
+  },
+
+  // Admin Endpoints
+  getAdminLeaveRequests: async (params: { page?: number; size?: number; status?: string; search?: string }) => {
+    const query = new URLSearchParams();
+    if (params.page !== undefined) query.append('page', params.page.toString());
+    if (params.size !== undefined) query.append('size', params.size.toString());
+    if (params.status) query.append('status', params.status);
+    if (params.search) query.append('search', params.search);
+    return apiRequest<any>(`/leave/requests?${query.toString()}`);
+  },
+
+  adminApproveLeave: async (id: string) => {
+    return apiRequest<any>(`/leave/${id}/approve`, {
+      method: 'PATCH',
+    });
+  },
+
+  adminRejectLeave: async (id: string, reason: string) => {
+    return apiRequest<any>(`/leave/${id}/reject`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reason }),
+    });
   }
 };
