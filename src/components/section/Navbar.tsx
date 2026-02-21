@@ -51,6 +51,7 @@ export default function Navbar () {
     const searchablePaths = [
         "/sub-admin-management",
         "/employer-management",
+        "/attendance-management",
         "/user-management", // If we add this later
         "/help-and-support",
         "/immigration-report",

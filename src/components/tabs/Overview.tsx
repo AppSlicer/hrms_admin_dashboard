@@ -7,8 +7,12 @@ import {useEffect, useState} from "react";
 import {dashboardService} from "@/services/dashboard.service.ts";
 import {toast} from "sonner";
 import Loader from "@/components/ui/Loader.tsx";
+import {useSelector} from "react-redux";
+import type {RootState} from "@/redux/stores/store.ts";
+import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
 
 export default function OverviewTab() {
+    const { user } = useSelector((state: RootState) => state.auth);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<any>(null);
 
@@ -39,12 +43,13 @@ export default function OverviewTab() {
     const stats = data.stats;
     const subAdminEarnings = data.subAdminEarnings;
     const employersData = data.employersData;
+    const isSuperAdmin = user?.role === USER_ROLE_ENUM.SUPER_ADMIN;
 
     return (
         <div className="space-y-6 p-4 md:p-6 lg:p-8">
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                <StatCard title="Total Sub Admin" value={stats?.totalSubAdmins ?? stats?.totalSubAdmin ?? 0} />
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isSuperAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-4 md:gap-6`}>
+                {isSuperAdmin && <StatCard title="Total Sub Admin" value={stats?.totalSubAdmins ?? stats?.totalSubAdmin ?? 0} />}
                 <StatCard title="Total Employer" value={stats?.totalEmployers ?? 0} />
                 <StatCard title="Total Employee" value={stats?.totalEmployees ?? 0} />
                 <StatCard title="Total Revenue" value={Number(stats?.totalRevenue) || 0} />
@@ -57,7 +62,7 @@ export default function OverviewTab() {
             </div>
 
             {/* Additional Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className={`grid grid-cols-1 ${isSuperAdmin ? 'md:grid-cols-2 xl:grid-cols-3' : 'md:grid-cols-1 xl:grid-cols-1'} gap-6`}>
                 <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800">
                     <div className={"flex items-center justify-between border-b dark:border-gray-800 text-xl font-semibold mb-2 pb-2 text-gray-900 dark:text-white"}>
                         <h4 className={""}>Total Company</h4>
@@ -80,32 +85,36 @@ export default function OverviewTab() {
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800">
-                    <div className={"flex items-center justify-between border-b dark:border-gray-800 text-xl font-semibold mb-2 pb-2 text-gray-900 dark:text-white"}>
-                        <h4 className={""}>Total Sub Admin</h4>
-                        <h4 className={""}>{stats?.totalSubAdmins ?? 0}</h4>
-                    </div>
-                    <div className={"flex items-center justify-between text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2"}>
-                        <h2>Sub Admin</h2>
-                        <h2>Company</h2>
-                    </div>
-                    <div className="overflow-y-auto h-[160px] custom-scrollbar pr-2">
-                        {subAdminEarnings?.map((item: any, i: number) => (
-                            <div key={i} className={"flex items-center justify-between mt-2 font-semibold text-gray-700 dark:text-gray-300"}>
-                                <div className={"flex gap-2 items-center"}>
-                                    <Twitter size={16} className="text-blue-400" />
-                                    <h3 className="text-sm">{item.name}</h3>
-                                </div>
-                                <h3 className="text-sm">{item.employerCount}</h3>
+                {isSuperAdmin && (
+                    <>
+                        <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                            <div className={"flex items-center justify-between border-b dark:border-gray-800 text-xl font-semibold mb-2 pb-2 text-gray-900 dark:text-white"}>
+                                <h4 className={""}>Total Sub Admin</h4>
+                                <h4 className={""}>{stats?.totalSubAdmins ?? 0}</h4>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                            <div className={"flex items-center justify-between text-gray-500 dark:text-gray-400 text-sm font-bold uppercase tracking-wider mb-2"}>
+                                <h2>Sub Admin</h2>
+                                <h2>Company</h2>
+                            </div>
+                            <div className="overflow-y-auto h-[160px] custom-scrollbar pr-2">
+                                {subAdminEarnings?.map((item: any, i: number) => (
+                                    <div key={i} className={"flex items-center justify-between mt-2 font-semibold text-gray-700 dark:text-gray-300"}>
+                                        <div className={"flex gap-2 items-center"}>
+                                            <Twitter size={16} className="text-blue-400" />
+                                            <h3 className="text-sm">{item.name}</h3>
+                                        </div>
+                                        <h3 className="text-sm">{item.employerCount}</h3>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800 flex justify-center relative">
-                    <h3 className={"absolute z-10 text-xl font-semibold top-2 text-gray-900 dark:text-white"}>Sub Admin Earning</h3>
-                    <GaugeChart value={subAdminEarnings?.reduce((sum: number, item: any) => sum + item.earning, 0) || 0} max={stats?.totalRevenue || 100} label="Revenue" />
-                </div>
+                        <div className="bg-white dark:bg-card h-[265px] overflow-hidden shadow-lg p-6 rounded-xl border border-gray-100 dark:border-gray-800 flex justify-center relative">
+                            <h3 className={"absolute z-10 text-xl font-semibold top-2 text-gray-900 dark:text-white"}>Sub Admin Earning</h3>
+                            <GaugeChart value={subAdminEarnings?.reduce((sum: number, item: any) => sum + item.earning, 0) || 0} max={stats?.totalRevenue || 100} label="Revenue" />
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
