@@ -17,7 +17,8 @@ export const profileService = {
     formData.append('file', file);
 
     const token = localStorage.getItem('accessToken');
-    const response = await fetch('http://164.68.121.216:8089/api/v1/profile/upload', {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8089';
+    const response = await fetch(`${API_BASE_URL}/api/v1/profile/upload`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

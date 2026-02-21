@@ -25,11 +25,31 @@ ChartJS.register(
     Filler
 );
 
-export default function ProfitChart(){
+export default function ProfitChart({ data }: { data?: any[] }) {
     const themeMode = useSelector((state: RootState) => state.theme.mode);
     const isDark = themeMode === 'dark';
 
-    const labels = Array.from({ length: 30 }, (_, i) => `Dec ${i + 1}`);
+    const labels = data?.map(m => m.month) || Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`);
+
+    const profitData = {
+        labels,
+        datasets: [
+            {
+                label: "Profit",
+                data: data?.map(m => m.profit) || labels.map(() => 0),
+                borderColor: "rgba(168, 85, 247, 1)",
+                backgroundColor: isDark ? "rgba(168, 85, 247, 0.2)" : "rgba(168, 85, 247, 0.1)",
+                fill: true,
+                pointBackgroundColor: "rgba(168, 85, 247, 1)",
+                pointBorderColor: isDark ? "#1f2937" : "#ffffff",
+                pointHoverBackgroundColor: "#ffffff",
+                pointHoverBorderColor: "rgba(168, 85, 247, 1)",
+            }
+        ]
+    }
+
+    const totalProfit = profitData.datasets[0].data.reduce((a, b) => a + b, 0);
+    const totalRevenue = data?.reduce((sum, item) => sum + item.revenue, 0) || 0;
 
     const chartOptions = {
         responsive: true,
@@ -79,13 +99,13 @@ export default function ProfitChart(){
                 },
                 ticks: {
                     color: isDark ? '#9ca3af' : '#6b7280',
-                    callback: (value: any) => `$${(value / 1000).toFixed(0)}k`
+                    callback: (value: any) => `£${value.toLocaleString()}`
                 }
             }
         },
         elements: {
             point: {
-                radius: 0,
+                radius: 4,
                 hoverRadius: 6,
                 hoverBorderWidth: 2,
             },
@@ -95,61 +115,14 @@ export default function ProfitChart(){
             }
         },
     }
-    const profitData = {
-        labels,
-        datasets: [
-            {
-                label: "Profit",
-                data: labels.map(() => Math.floor(Math.random() * 80000) + 10000),
-                borderColor: "rgba(168, 85, 247, 1)",
-                backgroundColor: isDark ? "rgba(168, 85, 247, 0.2)" : "rgba(168, 85, 247, 0.1)",
-                fill: true,
-                pointBackgroundColor: "rgba(168, 85, 247, 1)",
-                pointBorderColor: isDark ? "#1f2937" : "#ffffff",
-                pointHoverBackgroundColor: "#ffffff",
-                pointHoverBorderColor: "rgba(168, 85, 247, 1)",
-            }
-        ]
-    }
-    const revenueData = {
-        labels,
-        datasets: [
-            {
-                label: "Revenue",
-                data: labels.map(() => Math.floor(Math.random() * 35000) + 5000),
-                borderColor: "rgba(34, 197, 94, 1)",
-                backgroundColor: "rgba(34, 197, 94, 0.1)",
-                fill: true,
-                pointBackgroundColor: "rgba(34, 197, 94, 1)",
-                pointBorderColor: "#ffffff",
-                pointHoverBackgroundColor: "#ffffff",
-                pointHoverBorderColor: "rgba(34, 197, 94, 1)",
-            },
-            {
-                label: "Other Revenue",
-                data: labels.map(() => Math.floor(Math.random() * 25000) + 5000),
-                borderColor: "rgba(59, 130, 246, 1)",
-                backgroundColor: "rgba(59, 130, 246, 0.1)",
-                fill: true,
-                pointBackgroundColor: "rgba(59, 130, 246, 1)",
-                pointBorderColor: "#ffffff",
-                pointHoverBackgroundColor: "#ffffff",
-                pointHoverBorderColor: "rgba(59, 130, 246, 1)",
-            }
-        ]
-    }
-
-    const totalProfit = profitData.datasets[0].data.reduce((a, b) => a + b, 0);
-    const totalRevenue = revenueData.datasets[0].data.reduce((a, b) => a + b, 0);
 
     return (
         <div className="bg-white dark:bg-card p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-gray-800 dark:text-white">Profit Overview</h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">December 2024 Performance</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">Monthly Performance</p>
                 </div>
-                <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 rounded-full text-sm font-medium">+8.3%</span>
             </div>
             <div className="h-80">
                 <Line data={profitData} options={chartOptions} />
@@ -158,13 +131,13 @@ export default function ProfitChart(){
                 <div>
                     <p className="text-gray-600 dark:text-gray-400">Total Profit</p>
                     <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                        ${(totalProfit / 1000).toFixed(1)}k
+                        £{totalProfit.toLocaleString()}
                     </p>
                 </div>
                 <div className="text-right">
                     <p className="text-gray-600 dark:text-gray-400">Profit Margin</p>
                     <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                        {((totalProfit / totalRevenue) * 100).toFixed(1)}%
+                        {totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(1) : 0}%
                     </p>
                 </div>
             </div>

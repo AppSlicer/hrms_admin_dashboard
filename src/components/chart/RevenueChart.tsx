@@ -25,18 +25,18 @@ ChartJS.register(
     Filler
 );
 
-export default function RevenueChart() {
+export default function RevenueChart({ data }: { data?: any[] }) {
     const themeMode = useSelector((state: RootState) => state.theme.mode);
     const isDark = themeMode === 'dark';
 
-    const labels = Array.from({ length: 30 }, (_, i) => `Dec ${i + 1}`);
+    const labels = data?.map(m => m.month) || Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`);
 
     const revenueData = {
         labels,
         datasets: [
             {
                 label: "Revenue",
-                data: labels.map(() => Math.floor(Math.random() * 35000) + 5000),
+                data: data?.map(m => m.revenue) || labels.map(() => 0),
                 borderColor: "rgba(34, 197, 94, 1)",
                 backgroundColor: isDark ? "rgba(34, 197, 94, 0.2)" : "rgba(34, 197, 94, 0.1)",
                 fill: true,
@@ -44,17 +44,6 @@ export default function RevenueChart() {
                 pointBorderColor: isDark ? "#1f2937" : "#ffffff",
                 pointHoverBackgroundColor: "#ffffff",
                 pointHoverBorderColor: "rgba(34, 197, 94, 1)",
-            },
-            {
-                label: "Other Revenue",
-                data: labels.map(() => Math.floor(Math.random() * 25000) + 5000),
-                borderColor: "rgba(59, 130, 246, 1)",
-                backgroundColor: isDark ? "rgba(59, 130, 246, 0.2)" : "rgba(59, 130, 246, 0.1)",
-                fill: true,
-                pointBackgroundColor: "rgba(59, 130, 246, 1)",
-                pointBorderColor: isDark ? "#1f2937" : "#ffffff",
-                pointHoverBackgroundColor: "#ffffff",
-                pointHoverBorderColor: "rgba(59, 130, 246, 1)",
             }
         ]
     }
@@ -108,13 +97,13 @@ export default function RevenueChart() {
                 },
                 ticks: {
                     color: isDark ? '#9ca3af' : '#6b7280',
-                    callback: (value: any) => `$${(value / 1000).toFixed(0)}k`
+                    callback: (value: any) => `£${value.toLocaleString()}`
                 }
             }
         },
         elements: {
             point: {
-                radius: 0,
+                radius: 4,
                 hoverRadius: 6,
                 hoverBorderWidth: 2,
             },
@@ -131,9 +120,8 @@ export default function RevenueChart() {
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-gray-800 dark:text-white">Revenue Analytics</h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">December 2024 Performance</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">Monthly Performance</p>
                 </div>
-                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">+12.5%</span>
             </div>
             <div className="h-80">
                 <Line data={revenueData} options={chartOptions} />
@@ -142,13 +130,7 @@ export default function RevenueChart() {
                 <div>
                     <p className="text-gray-600 dark:text-gray-400">Total Revenue</p>
                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                        ${(totalRevenue / 1000).toFixed(1)}k
-                    </p>
-                </div>
-                <div className="text-right">
-                    <p className="text-gray-600 dark:text-gray-400">Avg. Daily</p>
-                    <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                        ${(totalRevenue / 30 / 1000).toFixed(1)}k
+                        £{totalRevenue.toLocaleString()}
                     </p>
                 </div>
             </div>

@@ -47,9 +47,32 @@ export const subAdmin = [
     { icon: MessageCircleQuestionMark, title: "Help & Support" },
 ] as const;
 
+export const employer = [
+    { icon: LucideLayoutDashboard, title: "Overview" },
+    { icon: UsersRound, title: "Employee Management" },
+    { icon: Calendar1, title: "Attendance Management" },
+    { icon: CalendarMinus, title: "Leave Management" },
+    { icon: CalendarDays, title: "Task Management" },
+    { icon: Banknote, title: "PaySlips Manager" },
+    { icon: UserRound, title: "My Profile" },
+    { icon: MessageCircleQuestionMark, title: "Help & Support" },
+] as const;
+
+export const employee = [
+    { icon: LucideLayoutDashboard, title: "Overview" },
+    { icon: Calendar1, title: "Attendance" },
+    { icon: CalendarMinus, title: "Leave" },
+    { icon: CalendarDays, title: "Tasks" },
+    { icon: Banknote, title: "My PaySlips" },
+    { icon: UserRound, title: "My Profile" },
+    { icon: MessageCircleQuestionMark, title: "Help & Support" },
+] as const;
+
 // Extract all possible titles
 export type AdminTabTitle = typeof admin[number]["title"];
 export type SubAdminTabTitle = typeof subAdmin[number]["title"];
+export type EmployerTabTitle = typeof employer[number]["title"];
+export type EmployeeTabTitle = typeof employee[number]["title"];
 
 // Combine both into one type
-export type AllTabTitles = AdminTabTitle | SubAdminTabTitle;
+export type AllTabTitles = AdminTabTitle | SubAdminTabTitle | EmployerTabTitle | EmployeeTabTitle;

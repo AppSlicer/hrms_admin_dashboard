@@ -124,7 +124,9 @@ export default function HelpAndSupport() {
 
     useEffect(() => {
         fetchTickets();
-        const socket = io("http://localhost:8080");
+        // WebSocket Integration
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8089';
+        const socket = io(API_BASE_URL);
         socket.on("new-support-ticket", (data) => {
             const { ticket, targetSubAdminId } = data;
             const shouldNotify = user?.role === USER_ROLE_ENUM.SUPER_ADMIN || (user?.role === USER_ROLE_ENUM.SUB_ADMIN && user?.id === targetSubAdminId);

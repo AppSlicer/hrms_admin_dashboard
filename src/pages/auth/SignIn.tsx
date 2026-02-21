@@ -27,8 +27,8 @@ import {USER_ROLE_ENUM} from "@/enum/role.enum.ts";
 export default function SignInPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>(import.meta.env.VITE_DEFAULT_ADMIN_EMAIL || "");
+    const [password, setPassword] = useState<string>(import.meta.env.VITE_DEFAULT_ADMIN_PASSWORD || "");
     const [isPasswordOn, setIsPasswordOn] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 

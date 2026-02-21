@@ -1,5 +1,6 @@
 
-const BASE_URL = 'http://164.68.121.216:8089/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8089';
+const BASE_URL = `${API_BASE_URL}/api/v1`;
 
 export async function apiRequest<T>(
   endpoint: string,
