@@ -66,7 +66,8 @@ function EmailMarketing() {
         fetchUsers();
 
         // WebSocket Integration
-        const socket = io("http://localhost:8080");
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8089';
+        const socket = io(API_BASE_URL);
 
         socket.on("connect", () => {
             console.log("Connected to Real-time Marketing Updates");
