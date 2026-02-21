@@ -1,4 +1,4 @@
-import { X, Calendar, Clock, Briefcase, Users, Paperclip, FileText, Tag, AlertCircle } from "lucide-react";
+import { X, Calendar, Clock, Users, Paperclip, FileText, Tag, AlertCircle } from "lucide-react";
 import type { Task, TaskStatus, TaskPriority } from "@/services/task.service";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
