@@ -1,177 +1,205 @@
 import {Button} from "@/components/ui/button.tsx";
-import TableRow from "@/components/ui/TableRow.tsx";
-import Table from "@/components/ui/Table.tsx";
-import TableRowCol from "@/components/ui/TableRowCol.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import ImageStatic from "/auth/google.png";
-import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {ChevronDownIcon, Edit, EyeOff, LockIcon} from "lucide-react";
-import {useState} from "react";
+import {ChevronDownIcon, Trash2, Calendar as CalendarIcon, Search} from "lucide-react";
+import {useEffect, useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Calendar} from "@/components/ui/calendar.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger
-} from "@radix-ui/react-dropdown-menu";
+import ReusableTable, { type Column } from "@/components/ui/ReusableTable";
+import { dashboardService } from "@/services/dashboard.service";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/redux/stores/store.ts";
+import PaySlipUploadModal from "@/components/modals/PaySlipUploadModal";
 
 export default function PaySlip() {
-
     const [open, setOpen] = useState<boolean>(false);
-    const [date, setDate] = useState<Date>( new Date( Date.now() ) );
+    const [date, setDate] = useState<Date>( new Date() );
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any[]>([]);
+    const searchQuery = useSelector((state: RootState) => state.search.query);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    
+    const [pagination, setPagination] = useState({
+        page: 0,
+        size: 10,
+        totalElements: 0,
+        totalPages: 0,
+        first: true,
+        last: true
+    });
+
+    const fetchPaySlips = async () => {
+        setLoading(true);
+        try {
+            const response = await dashboardService.getAdminPaySlips({
+                page: pagination.page,
+                size: pagination.size,
+                search: searchQuery,
+                sortBy: 'createdAt',
+                sortDirection: 'desc'
+            });
+            
+            setData(response.content);
+            setPagination(prev => ({
+                ...prev,
+                totalElements: response.totalElements,
+                totalPages: response.totalPages,
+                first: response.first,
+                last: response.last
+            }));
+        } catch (error: any) {
+            toast.error(error.message || "Failed to fetch pay slips");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPaySlips();
+    }, [pagination.page, pagination.size, searchQuery]);
+
+    const handleDelete = async (id: string) => {
+        if (!confirm("Are you sure you want to delete this pay slip?")) return;
+        
+        try {
+            await dashboardService.deleteAdminPaySlip(id);
+            toast.success("Pay slip deleted successfully");
+            fetchPaySlips();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to delete pay slip");
+        }
+    };
+
+    const columns: Column<any>[] = [
+        { header: "SL", flex: 0.5, render: (_, index) => <span className="text-sm font-bold">{pagination.page * pagination.size + index + 1}</span> },
+        { 
+            header: "Image", 
+            flex: 0.5, 
+            render: (item) => (
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <ImageWithSkeleton src={item.image || "https://placehold.co/100x100?text=PS"} />
+                </div>
+            ) 
+        },
+        { 
+            header: "Full Name", 
+            render: (item) => (
+                <div className="px-2">
+                    <span className="text-sm font-bold dark:text-gray-200 truncate block">{item.employeeName}</span>
+                </div>
+            ) 
+        },
+        { 
+            header: "Employee ID", 
+            render: (item) => <span className="text-xs text-gray-500 font-mono">{item.employeeId.split('-')[0]}...</span> 
+        },
+        { 
+            header: "Job Category", 
+            render: (item) => <span className="text-xs dark:text-gray-300">{item.jobCategory}</span> 
+        },
+        { 
+            header: "Amount", 
+            render: (item) => <span className="text-sm font-black text-green-600 dark:text-green-400">£{parseFloat(item.amount).toLocaleString()}</span> 
+        },
+        { 
+            header: "Date", 
+            render: (item) => (
+                <div className="text-[10px] font-medium flex items-center gap-1">
+                    <CalendarIcon size={12} className="text-gray-400" />
+                    {item.transactionDate ? new Date(item.transactionDate).toLocaleDateString() : 'N/A'}
+                </div>
+            ) 
+        },
+        { 
+            header: "Action", 
+            render: (item) => (
+                <div className="flex gap-2">
+                    <Button 
+                        variant="outline" 
+                        size="icon"
+                        className="h-8 w-8 text-blue-600 border-blue-200 hover:bg-blue-50"
+                        onClick={() => window.open(item.image, '_blank')}
+                    >
+                        <Search size={14} />
+                    </Button>
+                    <Button 
+                        variant="outline" 
+                        size="icon"
+                        className="h-8 w-8 text-red-600 border-red-200 hover:bg-red-50"
+                        onClick={() => handleDelete(item.id)}
+                    >
+                        <Trash2 size={14} />
+                    </Button>
+                </div>
+            )
+        }
+    ];
 
     return (
-        <div className={"w-full h-full p-6"}>
+        <div className={"w-full h-full p-6 bg-transparent"}>
             {/* Header section */}
-            <div className={"flex justify-between items-center"}>
-                <h1 className={"text-3xl font-semibold"}>Pay Slip</h1>
-                    <div className={"gap-2 flex z-20 items-center"}>
-                        <Button className={"bg-green-700 text-white rounded-full cursor-pointer"}>Download</Button>
-                        <Button className={"bg-[#125BAC] text-white rounded-full cursor-pointer"}>Upload Pay Slip</Button>
-                        <div className="flex flex-col gap-3 w-full h-full">
-                            <Popover open={open} onOpenChange={setOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        id="date"
-                                        className="w-48 justify-between font-normal"
-                                    >
-                                        {date ? date.toLocaleDateString() : "Select date"}
-                                        <ChevronDownIcon />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={date}
-                                        captionLayout="dropdown"
-                                        onSelect={(date) => {
-                                            setDate(date!)
-                                            setOpen(false)
-                                        }}
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className={"cursor-pointer"}>All User</Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56 border bg-white rounded-xl p-4 mr-8 mt-4" align="start">
-                                <DropdownMenuLabel className={"font-semibold border-b pb-2"}>Users type</DropdownMenuLabel>
-                                <DropdownMenuGroup className={""}>
-                                    <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer my-3 hover:shadow-sm font-semibold"}>Employer</DropdownMenuItem>
-                                    <DropdownMenuItem className={"p-2 border rounded-full text-center cursor-pointer hover:shadow-sm font-semibold"}>Employee</DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+            <div className={"flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8"}>
+                <div>
+                    <h1 className={"text-3xl font-semibold text-gray-900 dark:text-white"}>PaySlips Manager</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Manage and upload employee pay slips.</p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                    <Button 
+                        onClick={() => setIsUploadModalOpen(true)}
+                        className="bg-[#125BAC] dark:bg-blue-600 text-white rounded-full h-11 px-8 font-bold shadow-lg shadow-blue-900/20"
+                    >
+                        Upload Pay Slip
+                    </Button>
+                    
+                    <div className="flex gap-2 items-center">
+                        <Popover open={open} onOpenChange={setOpen}>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" className="h-11 w-48 justify-between font-bold rounded-xl dark:border-gray-800 dark:text-gray-300">
+                                    {date ? date.toLocaleDateString() : "Select date"}
+                                    <ChevronDownIcon size={16} />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 border-gray-200 dark:border-gray-800" align="end">
+                                <Calendar mode="single" selected={date} onSelect={(d) => { setDate(d!); setOpen(false); }} />
+                            </PopoverContent>
+                        </Popover>
                     </div>
+                </div>
             </div>
-            {/* Table */}
-            <Table totalPages={10} className={""}>
-                {/* Table Heading*/}
-                <TableRow
-                    className={"bg-[#C7E2FF] h-[60px] border-0 font-semibold"}
-                >
-                    <TableRowCol>
-                        <h3>SL</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Image</h3>
-                    </TableRowCol>
-                    <TableRowCol >
-                        <h3>Full Name</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Id</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Designation</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Email</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Phone Number</h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3>Action</h3>
-                    </TableRowCol>
-                </TableRow>
-                {/* Table body or content */}
-                <TableRow
-                    className={"h-[60px] border rounded-none"}
-                >
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("1")}
-                        >
-                            1
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[30px] h-[30px] rounded-full overflow-hidden"}>
-                            <ImageWithSkeleton src={ImageStatic} />
-                        </div>
-                    </TableRowCol>
-                    <TableRowCol >
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("MD Sohidul Islam Ananto")}
-                        >
-                            Johan Smith
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("a23rqawedf")}
-                        >
-                            asdf23423
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("anontom90@gmail.com")}
-                        >
-                            Manager
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("01383938337")}
-                        >
-                            user@mail.com
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <h3
-                            className="text-sm max-w-[80px] truncate whitespace-nowrap overflow-hidden cursor-pointer"
-                            title={"Click to copy on clipboard"}
-                            onClick={() => copyToClipboard("2113")}
-                        >
-                            234231324123123
-                        </h3>
-                    </TableRowCol>
-                    <TableRowCol>
-                        <div className={"w-[70%] h-full flex justify-around items-center"}>
-                            <LockIcon className={"cursor-pointer text-red-500"} />
-                            <EyeOff className={"cursor-pointer text-green-500"} />
-                            <Edit className={"cursor-pointer text-gray-500"} />
-                        </div>
-                    </TableRowCol>
-                </TableRow>
-            </Table>
+
+            <ReusableTable columns={columns} data={data} isLoading={loading} />
+
+            {isUploadModalOpen && (
+                <PaySlipUploadModal 
+                    onClose={() => setIsUploadModalOpen(false)}
+                    onUpdate={fetchPaySlips}
+                />
+            )}
+
+            <div className="flex justify-between items-center mt-4 px-2">
+                <p className="text-sm text-gray-500">
+                    Showing {data.length} of {pagination.totalElements} records
+                </p>
+                <div className="flex gap-2">
+                    <Button 
+                        disabled={pagination.first || loading} 
+                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+                        variant="outline" 
+                        className="h-9 rounded-lg"
+                    >
+                        Previous
+                    </Button>
+                    <Button 
+                        disabled={pagination.last || loading} 
+                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+                        variant="outline" 
+                        className="h-9 rounded-lg"
+                    >
+                        Next
+                    </Button>
+                </div>
+            </div>
         </div>
     )
 }

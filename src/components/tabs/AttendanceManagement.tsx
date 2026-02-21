@@ -37,7 +37,7 @@ export default function AttendanceManagement() {
     const fetchAttendances = async () => {
         setLoading(true);
         try {
-            const formattedDate = date.toISOString().split('T')[0];
+            const formattedDate = date ? date.toISOString().split('T')[0] : '';
             const response = await dashboardService.getAdminAttendances({
                 page: pagination.page,
                 size: pagination.size,
