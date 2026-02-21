@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { X, Upload, Calendar as CalendarIcon, DollarSign, FileText, User } from "lucide-react";
 import { dashboardService } from "@/services/dashboard.service";
 import { userService } from "@/services/user.service";
+import { profileService } from "@/services/profile.service";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -17,9 +18,10 @@ interface PaySlipUploadModalProps {
 
 export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadModalProps) {
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [employees, setEmployees] = useState<any[]>([]);
     const [loadingEmployees, setLoadingEmployees] = useState(false);
-    
+
     const [formData, setFormData] = useState({
         employeeId: "",
         amount: "",
@@ -29,17 +31,17 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
     });
 
     const [file, setFile] = useState<File | null>(null);
+    const [filePreview, setFilePreview] = useState<string>("");
 
     useEffect(() => {
         const fetchEmployees = async () => {
             setLoadingEmployees(true);
             try {
-                // We need a way to get employees for the admin/subadmin to select from
-                // For now, let's assume userService.getEmployees exists or similar
                 const response = await userService.getEmployees({ size: 100 });
-                setEmployees(response.content || []);
+                setEmployees(response.content || response || []);
             } catch (error: any) {
                 console.error("Failed to fetch employees", error);
+                toast.error("Could not load employee list");
             } finally {
                 setLoadingEmployees(false);
             }
@@ -48,9 +50,18 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
+        const selected = e.target.files?.[0];
+        if (!selected) return;
+        if (!selected.type.startsWith('image/')) {
+            toast.error("Please select an image file");
+            return;
         }
+        if (selected.size > 5 * 1024 * 1024) {
+            toast.error("File size must be less than 5MB");
+            return;
+        }
+        setFile(selected);
+        setFilePreview(URL.createObjectURL(selected));
     };
 
     const handleSubmit = async () => {
@@ -61,14 +72,10 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
 
         setIsUpdating(true);
         try {
-            // 1. Upload file first if needed, or send as multipart
-            // Assuming we have a file upload utility. 
-            // For now, let's simulate the upload or use a placeholder URL if the API expects a URL
-            // Real implementation would likely use a FormData object
-            
-            // Simulating file upload to get a URL (you should replace this with actual upload logic)
-            // const imageUrl = await uploadFile(file);
-            const imageUrl = "https://placehold.co/400x600?text=PaySlip"; // Placeholder
+            // Upload file first
+            setIsUploading(true);
+            const { url: imageUrl } = await profileService.uploadImage(file);
+            setIsUploading(false);
 
             await dashboardService.createAdminPaySlip({
                 ...formData,
@@ -80,6 +87,7 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
             onUpdate();
             onClose();
         } catch (error: any) {
+            setIsUploading(false);
             toast.error(error.message || "Failed to create pay slip");
         } finally {
             setIsUpdating(false);
@@ -106,14 +114,18 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
                         <Label className="text-xs font-bold uppercase tracking-widest text-gray-500 flex items-center gap-2">
                             <User size={14} /> Select Employee *
                         </Label>
-                        <select 
+                        <select
                             value={formData.employeeId}
                             onChange={(e) => setFormData({...formData, employeeId: e.target.value})}
                             className="w-full h-11 px-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                            disabled={loadingEmployees}
                         >
-                            <option value="">Select an employee</option>
+                            <option value="">{loadingEmployees ? "Loading employees..." : "Select an employee"}</option>
                             {employees.map(emp => (
-                                <option key={emp.id} value={emp.id}>{emp.name} ({emp.email})</option>
+                                <option key={emp.id} value={emp.id}>
+                                    {emp.name || `${emp.firstName || ''} ${emp.lastName || ''}`.trim() || emp.email}
+                                    {emp.email ? ` (${emp.email})` : ''}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -123,7 +135,7 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
                         <Label className="text-xs font-bold uppercase tracking-widest text-gray-500 flex items-center gap-2">
                             <DollarSign size={14} /> Amount *
                         </Label>
-                        <Input 
+                        <Input
                             type="text"
                             value={formData.amount}
                             onChange={(e) => setFormData({...formData, amount: e.target.value})}
@@ -163,33 +175,39 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
                         <Label className="text-xs font-bold uppercase tracking-widest text-gray-500 flex items-center gap-2">
                             <FileText size={14} /> Description
                         </Label>
-                        <textarea 
+                        <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                             placeholder="Add a description or note..."
-                            className="w-full min-h-[100px] p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                            className="w-full min-h-[80px] p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                         />
                     </div>
 
                     {/* File Upload */}
                     <div className="space-y-2">
                         <Label className="text-xs font-bold uppercase tracking-widest text-gray-500 flex items-center gap-2">
-                            <Upload size={14} /> Pay Slip File (Image) *
+                            <Upload size={14} /> Pay Slip Image *
                         </Label>
-                        <div className="border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center hover:border-blue-400 transition-colors relative">
-                            <input 
-                                type="file" 
+                        <div className="border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center hover:border-blue-400 transition-colors relative">
+                            <input
+                                type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
-                            <div className="flex flex-col items-center gap-2 text-gray-500">
-                                <Upload size={32} className="text-blue-500" />
-                                <p className="text-sm font-medium">
-                                    {file ? file.name : "Click or drag to upload image"}
-                                </p>
-                                <p className="text-[10px] uppercase tracking-wider">PNG, JPG up to 5MB</p>
-                            </div>
+                            {filePreview ? (
+                                <div className="flex flex-col items-center gap-2">
+                                    <img src={filePreview} alt="Preview" className="h-24 object-contain rounded-lg border border-gray-200" />
+                                    <p className="text-xs text-gray-500 font-medium">{file?.name}</p>
+                                    <p className="text-[10px] text-blue-500">Click to change</p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center gap-2 text-gray-500">
+                                    <Upload size={32} className="text-blue-500" />
+                                    <p className="text-sm font-medium">Click or drag to upload image</p>
+                                    <p className="text-[10px] uppercase tracking-wider">PNG, JPG up to 5MB</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -200,7 +218,7 @@ export default function PaySlipUploadModal({ onClose, onUpdate }: PaySlipUploadM
                         Cancel
                     </Button>
                     <Button onClick={handleSubmit} disabled={isUpdating} className="rounded-xl px-10 font-bold h-11 bg-[#125BAC] hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20">
-                        {isUpdating ? "Uploading..." : "Create Pay Slip"}
+                        {isUploading ? "Uploading image..." : isUpdating ? "Creating..." : "Create Pay Slip"}
                     </Button>
                 </div>
             </div>

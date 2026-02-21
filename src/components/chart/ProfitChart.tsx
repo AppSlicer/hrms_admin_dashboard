@@ -99,7 +99,7 @@ export default function ProfitChart({ data }: { data?: any[] }) {
                 },
                 ticks: {
                     color: isDark ? '#9ca3af' : '#6b7280',
-                    callback: (value: any) => `£${value.toLocaleString()}`
+                    callback: (value: any) => `${value.toLocaleString()}`
                 }
             }
         },
@@ -131,7 +131,7 @@ export default function ProfitChart({ data }: { data?: any[] }) {
                 <div>
                     <p className="text-gray-600 dark:text-gray-400">Total Profit</p>
                     <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                        £{totalProfit.toLocaleString()}
+                        {totalProfit.toLocaleString()}
                     </p>
                 </div>
                 <div className="text-right">

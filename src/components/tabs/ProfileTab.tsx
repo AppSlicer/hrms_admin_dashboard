@@ -17,9 +17,10 @@ export default function ProfileTabs() {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    
+
     // Profile state
     const [profile, setProfile] = useState<any>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string>("");
     const [name, setName] = useState("");
     const [contact, setContact] = useState("");
     const [email, setEmail] = useState("");
@@ -42,8 +43,9 @@ export default function ProfileTabs() {
             
             let displayName = "";
             // Use the User model image first, fallback to role-specific, then default
-            const avatarUrl = data.profileImage || data.profile?.profileImage || defaultImage;
-            console.log("RESOLVED AVATAR URL:", avatarUrl);
+            const resolvedAvatar = data.profileImage || data.profile?.profileImage || defaultImage;
+            setAvatarUrl(resolvedAvatar);
+            console.log("RESOLVED AVATAR URL:", resolvedAvatar);
 
             if (data.role === 'EMPLOYER') {
                 displayName = data.profile?.companyName || "";
@@ -62,7 +64,7 @@ export default function ProfileTabs() {
             // Sync to global state so Sidebar and Navbar update
             dispatch(updateUser({
                 name: displayName,
-                image: avatarUrl,
+                image: resolvedAvatar,
                 role: data.role
             }));
 
@@ -218,7 +220,9 @@ export default function ProfileTabs() {
                                 {/* Main Image */}
                                 <div className={`w-full h-full transition-transform duration-700 ${isUploading ? 'scale-110 blur-sm' : 'group-hover:scale-110'}`}>
                                     <ImageWithSkeleton
-                                        src={profile?.profileImage || profile?.profile?.profileImage || defaultImage}
+                                        key={avatarUrl}
+                                        src={avatarUrl || defaultImage}
+                                        fallbackSrc={defaultImage}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>

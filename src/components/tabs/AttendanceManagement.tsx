@@ -1,7 +1,6 @@
 import {Button} from "@/components/ui/button.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import {copyToClipboard} from "@/lib/copyClipboard.ts";
-import {ChevronDownIcon, Search} from "lucide-react";
+import {ChevronDownIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Calendar} from "@/components/ui/calendar.tsx";

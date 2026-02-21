@@ -86,10 +86,10 @@ export default function LeaveManagement() {
                 </div>
             ) 
         },
-        { 
-            header: "Designation", 
-            render: (item) => <span className="text-xs dark:text-gray-300">{item.designation}</span> 
-        },
+        // { 
+        //     header: "Designation", 
+        //     render: (item) => <span className="text-xs dark:text-gray-300">{item.designation}</span> 
+        // },
         { 
             header: "Type", 
             render: (item) => <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">{item.leaveType}</span> 

@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button.tsx";
 import ImageWithSkeleton from "@/components/ui/ImageWIthSkeleton.tsx";
-import {ChevronDownIcon, Trash2, Calendar as CalendarIcon, Search} from "lucide-react";
+import {ChevronDownIcon, Trash2, Calendar as CalendarIcon, Eye} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Calendar} from "@/components/ui/calendar.tsx";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/redux/stores/store.ts";
 import PaySlipUploadModal from "@/components/modals/PaySlipUploadModal";
+import PaySlipDetailModal from "@/components/modals/PaySlipDetailModal";
 
 export default function PaySlip() {
     const [open, setOpen] = useState<boolean>(false);
@@ -18,6 +19,7 @@ export default function PaySlip() {
     const [data, setData] = useState<any[]>([]);
     const searchQuery = useSelector((state: RootState) => state.search.query);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [selectedPayslip, setSelectedPayslip] = useState<any>(null);
     
     const [pagination, setPagination] = useState({
         page: 0,
@@ -93,13 +95,13 @@ export default function PaySlip() {
             header: "Employee ID", 
             render: (item) => <span className="text-xs text-gray-500 font-mono">{item.employeeId.split('-')[0]}...</span> 
         },
-        { 
-            header: "Job Category", 
-            render: (item) => <span className="text-xs dark:text-gray-300">{item.jobCategory}</span> 
-        },
+        // { 
+        //     header: "Job Category", 
+        //     render: (item) => <span className="text-xs dark:text-gray-300">{item.jobCategory}</span> 
+        // },
         { 
             header: "Amount", 
-            render: (item) => <span className="text-sm font-black text-green-600 dark:text-green-400">£{parseFloat(item.amount).toLocaleString()}</span> 
+            render: (item) => <span className="text-sm font-black text-green-600 dark:text-green-400">{parseFloat(item.amount).toLocaleString()}</span> 
         },
         { 
             header: "Date", 
@@ -110,23 +112,25 @@ export default function PaySlip() {
                 </div>
             ) 
         },
-        { 
-            header: "Action", 
+        {
+            header: "Action",
             render: (item) => (
                 <div className="flex gap-2">
-                    <Button 
-                        variant="outline" 
+                    <Button
+                        variant="outline"
                         size="icon"
                         className="h-8 w-8 text-blue-600 border-blue-200 hover:bg-blue-50"
-                        onClick={() => window.open(item.image, '_blank')}
+                        onClick={() => setSelectedPayslip(item)}
+                        title="View details"
                     >
-                        <Search size={14} />
+                        <Eye size={14} />
                     </Button>
-                    <Button 
-                        variant="outline" 
+                    <Button
+                        variant="outline"
                         size="icon"
                         className="h-8 w-8 text-red-600 border-red-200 hover:bg-red-50"
                         onClick={() => handleDelete(item.id)}
+                        title="Delete"
                     >
                         <Trash2 size={14} />
                     </Button>
@@ -171,9 +175,16 @@ export default function PaySlip() {
             <ReusableTable columns={columns} data={data} isLoading={loading} />
 
             {isUploadModalOpen && (
-                <PaySlipUploadModal 
+                <PaySlipUploadModal
                     onClose={() => setIsUploadModalOpen(false)}
                     onUpdate={fetchPaySlips}
+                />
+            )}
+
+            {selectedPayslip && (
+                <PaySlipDetailModal
+                    payslip={selectedPayslip}
+                    onClose={() => setSelectedPayslip(null)}
                 />
             )}
 

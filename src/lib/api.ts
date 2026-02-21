@@ -10,7 +10,7 @@ export async function apiRequest<T>(
   const isPublic = endpoint.startsWith('/system/') && options.method === 'GET' || endpoint.startsWith('/auth/');
   
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
+    ...(options.body ? { 'Content-Type': 'application/json' } : {}),
     ...((token && !isPublic) ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };

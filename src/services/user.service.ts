@@ -50,4 +50,12 @@ export const userService = {
   getUsersByRole: async (role: string) => {
     return apiRequest<any[]>(`/users/role/${role}`);
   },
+
+  getEmployees: async (params: { size?: number; page?: number; search?: string } = {}) => {
+    const query = new URLSearchParams();
+    if (params.page !== undefined) query.append('page', params.page.toString());
+    if (params.size !== undefined) query.append('size', params.size.toString());
+    if (params.search) query.append('search', params.search);
+    return apiRequest<any>(`/employer/employees?${query.toString()}`);
+  },
 };
